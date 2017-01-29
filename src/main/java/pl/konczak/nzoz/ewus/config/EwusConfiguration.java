@@ -18,7 +18,7 @@ public class EwusConfiguration {
 
     @Bean
     public AuthenticationClient authenticationClient(Jaxb2Marshaller marshaller) {
-        final AuthenticationClient client = new AuthenticationClient();
+        final AuthenticationClient client = new AuthenticationClient(marshaller);
         client.setDefaultUri("https://ewus.nfz.gov.pl/ws-broker-server-ewus-auth-test/services/Auth");
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
