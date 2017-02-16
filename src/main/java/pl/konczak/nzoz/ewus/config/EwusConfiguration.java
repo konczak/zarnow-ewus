@@ -6,6 +6,7 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import pl.konczak.nzoz.ewus.client.ewus.AuthenticationClient;
 import pl.konczak.nzoz.ewus.client.ewus.LoginRequestFactory;
+import pl.konczak.nzoz.ewus.client.ewus.ServiceBrokerClient;
 
 @Configuration
 public class EwusConfiguration {
@@ -21,6 +22,15 @@ public class EwusConfiguration {
     public AuthenticationClient authenticationClient(Jaxb2Marshaller marshaller, LoginRequestFactory loginRequestFactory) {
         final AuthenticationClient client = new AuthenticationClient(marshaller, loginRequestFactory);
         client.setDefaultUri("https://ewus.nfz.gov.pl/ws-broker-server-ewus-auth-test/services/Auth");
+        client.setMarshaller(marshaller);
+        client.setUnmarshaller(marshaller);
+        return client;
+    }
+
+    @Bean
+    public ServiceBrokerClient serviceBrokerClient(Jaxb2Marshaller marshaller) {
+        final ServiceBrokerClient client = new ServiceBrokerClient(marshaller);
+        client.setDefaultUri("https://ewus.nfz.gov.pl/ws-broker-server-ewus-auth-test/services/ServiceBroker");
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
         return client;

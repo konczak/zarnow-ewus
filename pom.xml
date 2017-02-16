@@ -39,7 +39,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <version>0.13.1</version>
@@ -58,7 +58,7 @@
                             <url>https://ewus.nfz.gov.pl/ws-broker-server-ewus/services/Auth?wsdl</url>
                         </schema>
                         <schema>
-                            <url>https://ewus.nfz.gov.pl/ws-broker-server-ewus/services/ServiceBroker?wsdl</url>
+                            <url>https://ewus.nfz.gov.pl/ws-broker-server-ewus-auth-test/services/ServiceBroker?wsdl</url>
                         </schema>
                     </schemas>
                 </configuration>
@@ -76,14 +76,14 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- The package of your generated sources -->
+                     The package of your generated sources 
                     <packageName>pl.konczak.nzoz.ewus.client.xsd</packageName>
                     
                     <sources>
                         <source>src/main/xsd</source>
                     </sources>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
