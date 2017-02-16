@@ -16,11 +16,7 @@ import org.springframework.ws.soap.SoapMessage;
 import org.springframework.ws.support.MarshallingUtils;
 
 import pl.konczak.nzoz.ewus.client.broker.AuthToken;
-import pl.konczak.nzoz.ewus.client.broker.LoginParam;
-import pl.konczak.nzoz.ewus.client.broker.LoginParams;
 import pl.konczak.nzoz.ewus.client.broker.LoginRequest;
-import pl.konczak.nzoz.ewus.client.broker.ObjectFactory;
-import pl.konczak.nzoz.ewus.client.broker.ParamValue;
 import pl.konczak.nzoz.ewus.client.broker.Session;
 
 import javax.xml.bind.JAXBElement;
@@ -31,13 +27,14 @@ public class AuthenticationClient
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationClient.class);
 
-    private final ObjectFactory objectFactory;
-
     private final Jaxb2Marshaller marshaller;
 
-    public AuthenticationClient(Jaxb2Marshaller marshaller) {
-        objectFactory = new ObjectFactory();
+    private final LoginRequestFactory loginRequestFactory;
+
+    public AuthenticationClient(Jaxb2Marshaller marshaller,
+            LoginRequestFactory loginRequestFactory) {
         this.marshaller = marshaller;
+        this.loginRequestFactory = loginRequestFactory;
     }
 
 //    public void login(String login, String password) {
@@ -55,10 +52,10 @@ public class AuthenticationClient
 //
 //        LOGGER.info("complete: login");
 //    }
-    public void login(String login, String password) {
-        LOGGER.info("init: login <{}> <{}>", login, password);
+    public LoginResponse login() {
+        LOGGER.debug("login");
 
-        JAXBElement<LoginRequest> loginRequest = prepareLoginRequest(login, password);
+        JAXBElement<LoginRequest> loginRequest = loginRequestFactory.create();
 
         LoginResponse loginResponse = getWebServiceTemplate().sendAndReceive(
                 new WebServiceMessageCallback() {
@@ -103,66 +100,9 @@ public class AuthenticationClient
                 loginResponse.getAuthToken().getId(),
                 loginResponse.getResponse());
 
-        LOGGER.info("complete: login");
+        LOGGER.debug("complete: login");
+
+        return loginResponse;
     }
 
-    private JAXBElement<LoginRequest> prepareLoginRequest(String login, String password) {
-        LoginRequest loginRequest = objectFactory.createLoginRequest();
-        LoginParams loginParams = objectFactory.createLoginParams();
-
-        loginParams.getItem().add(domainParam());
-        loginParams.getItem().add(loginParam(login));
-        loginParams.getItem().add(typeParam());
-        loginParams.getItem().add(idSwdParam());
-
-        loginRequest.setCredentials(loginParams);
-        loginRequest.setPassword(password);
-
-        return objectFactory.createLogin(loginRequest);
-    }
-
-    private LoginParam domainParam() {
-        LoginParam domainParam = objectFactory.createLoginParam();
-        ParamValue paramValue = objectFactory.createParamValue();
-
-        domainParam.setName("domain");
-        //what is this?
-        paramValue.setStringValue("01");
-        domainParam.setValue(paramValue);
-
-        return domainParam;
-    }
-
-    private LoginParam loginParam(String login) {
-        LoginParam loginParam = objectFactory.createLoginParam();
-        ParamValue loginValue = objectFactory.createParamValue();
-
-        loginParam.setName("login");
-        loginValue.setStringValue(login);
-        loginParam.setValue(loginValue);
-
-        return loginParam;
-    }
-
-    private LoginParam typeParam() {
-        LoginParam typeParam = objectFactory.createLoginParam();
-        ParamValue typeValue = objectFactory.createParamValue();
-
-        typeParam.setName("type");
-        typeValue.setStringValue("SWD");
-        typeParam.setValue(typeValue);
-
-        return typeParam;
-    }
-
-    private LoginParam idSwdParam() {
-        LoginParam idSwdParam = objectFactory.createLoginParam();
-        ParamValue idSwdValue = objectFactory.createParamValue();
-
-        idSwdParam.setName("idntSwd");
-        idSwdValue.setStringValue("123456789");
-        idSwdParam.setValue(idSwdValue);
-
-        return idSwdParam;
-    }
 }

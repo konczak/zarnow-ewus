@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.konczak.nzoz.ewus.client.ewus.AuthenticationClient;
+import pl.konczak.nzoz.ewus.client.ewus.LoginResponse;
 
 @RestController
 @RequestMapping("/ewus")
@@ -22,10 +23,10 @@ public class EwusApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public HttpEntity<Void> login() {
+    public HttpEntity<LoginResponse> login() {
 
-        authenticationClient.login("TEST", "qwerty!@#");
+        LoginResponse loginResponse = authenticationClient.login();
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 }
