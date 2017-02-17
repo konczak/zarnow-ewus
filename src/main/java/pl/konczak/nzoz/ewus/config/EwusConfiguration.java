@@ -1,14 +1,13 @@
 package pl.konczak.nzoz.ewus.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
-import pl.konczak.nzoz.ewus.client.ewus.AuthenticationClient;
-import pl.konczak.nzoz.ewus.client.ewus.LoginRequestFactory;
-import pl.konczak.nzoz.ewus.client.ewus.ServiceBrokerClient;
+import pl.konczak.nzoz.ewus.client.old.AuthenticationClient;
+import pl.konczak.nzoz.ewus.client.old.LoginRequestFactory;
+import pl.konczak.nzoz.ewus.client.old.ServiceBrokerClient;
 
-@Configuration
+//@Configuration
 public class EwusConfiguration {
 
     @Bean
