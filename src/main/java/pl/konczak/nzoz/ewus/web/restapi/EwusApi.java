@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.konczak.nzoz.ewus.client.ewus.AuthClient;
+import pl.konczak.nzoz.ewus.client.ewus.BrokerClient;
 import pl.konczak.nzoz.ewus.client.old.AuthenticationClient;
 import pl.konczak.nzoz.ewus.client.old.LoginResponse;
 import pl.konczak.nzoz.ewus.client.old.ServiceBrokerClient;
@@ -23,8 +24,12 @@ public class EwusApi {
 
     private final AuthClient authClient;
 
-    public EwusApi(AuthClient authClient) {
+    private final BrokerClient brokerClient;
+
+    public EwusApi(AuthClient authClient,
+            BrokerClient brokerClient) {
         this.authClient = authClient;
+        this.brokerClient = brokerClient;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -48,6 +53,14 @@ public class EwusApi {
 
         LoginResponse loginResponse = authenticationClient.login();
         serviceBrokerClient.call(pesel, loginResponse);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/check",
+                    method = RequestMethod.GET)
+    public HttpEntity<Void> check() throws Exception {
+        brokerClient.checkCWU();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

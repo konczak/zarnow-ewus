@@ -18,7 +18,7 @@ public class AuthLoginRequestFactory {
 
     private static final String USER_TYPE = "SWD";
 
-    private static final String INDETYFIKATOR_SWIADCZENIODAWCY = "123456789";
+    private static final String IDENTYFIKATOR_SWIADCZENIODAWCY = "123456789";
 
     private static final String LOGIN = "TEST";
 
@@ -30,8 +30,6 @@ public class AuthLoginRequestFactory {
 
         SOAPPart soapPart = message.getSOAPPart();
         SOAPEnvelope envelope = soapPart.getEnvelope();
-//        QName qName = new QName("http://xml.kamsoft.pl/ws/kaas/login_types", "auth", "xmlns");
-//        envelope.addAttribute(qName, "http://xml.kamsoft.pl/ws/kaas/login_types");
 
         envelope.addNamespaceDeclaration("auth", "http://xml.kamsoft.pl/ws/kaas/login_types");
 
@@ -41,13 +39,10 @@ public class AuthLoginRequestFactory {
         SOAPBodyElement login = body.addBodyElement(AuthNamespaceUtil._Login_QNAME);
         SOAPElement credentials = login.addChildElement(AuthNamespaceUtil._Credentials_QNAME);
 
-        SOAPElement domainParam = domainParam(credentials);
-
-        SOAPElement typeParam = typeParam(credentials);
-
-        SOAPElement identyfikatorSwiadczeniodawcyParam = identyfikatorSwiadczeniodawcyParam(credentials);
-
-        SOAPElement loginParam = loginParam(credentials);
+        SOAPElement domainParam = itemParam(credentials, "domain", OW);
+        SOAPElement typeParam = itemParam(credentials, "type", USER_TYPE);
+        SOAPElement identyfikatorSwiadczeniodawcyParam = itemParam(credentials, "idntSwd", IDENTYFIKATOR_SWIADCZENIODAWCY);
+        SOAPElement loginParam = itemParam(credentials, "login", LOGIN);
 
         //
         SOAPElement password = login.addChildElement(AuthNamespaceUtil._Password_QNAME);
@@ -56,47 +51,14 @@ public class AuthLoginRequestFactory {
         return message;
     }
 
-    private SOAPElement domainParam(SOAPElement credentials) throws Exception {
-        SOAPElement domainParam = credentials.addChildElement(AuthNamespaceUtil._Item_QNAME);
-        SOAPElement domainParamName = domainParam.addChildElement(AuthNamespaceUtil._Name_QNAME);
-        domainParamName.addTextNode("domain");
-        SOAPElement domainParamValue = domainParam.addChildElement(AuthNamespaceUtil._Value_QNAME);
-        SOAPElement domainValueStringValue = domainParamValue.addChildElement(AuthNamespaceUtil._StringValue_QNAME);
-        domainValueStringValue.addTextNode(OW);
+    private SOAPElement itemParam(SOAPElement credentials, String name, String value) throws Exception {
+        SOAPElement itemParam = credentials.addChildElement(AuthNamespaceUtil._Item_QNAME);
+        SOAPElement itemParamName = itemParam.addChildElement(AuthNamespaceUtil._Name_QNAME);
+        itemParamName.addTextNode(name);
+        SOAPElement itemParamValue = itemParam.addChildElement(AuthNamespaceUtil._Value_QNAME);
+        SOAPElement itemParamStringValue = itemParamValue.addChildElement(AuthNamespaceUtil._StringValue_QNAME);
+        itemParamStringValue.addTextNode(value);
 
-        return domainParam;
-    }
-
-    private SOAPElement typeParam(SOAPElement credentials) throws Exception {
-        SOAPElement typeParam = credentials.addChildElement(AuthNamespaceUtil._Item_QNAME);
-        SOAPElement typeParamName = typeParam.addChildElement(AuthNamespaceUtil._Name_QNAME);
-        typeParamName.addTextNode("type");
-        SOAPElement typeParamValue = typeParam.addChildElement(AuthNamespaceUtil._Value_QNAME);
-        SOAPElement typeParamValueStringValue = typeParamValue.addChildElement(AuthNamespaceUtil._StringValue_QNAME);
-        typeParamValueStringValue.addTextNode(USER_TYPE);
-
-        return typeParam;
-    }
-
-    private SOAPElement identyfikatorSwiadczeniodawcyParam(SOAPElement credentials) throws Exception {
-        SOAPElement identyfikatorSwiadczeniodawcyParam = credentials.addChildElement(AuthNamespaceUtil._Item_QNAME);
-        SOAPElement identyfikatorSwiadczeniodawcyParamName = identyfikatorSwiadczeniodawcyParam.addChildElement(AuthNamespaceUtil._Name_QNAME);
-        identyfikatorSwiadczeniodawcyParamName.addTextNode("idntSwd");
-        SOAPElement typeValue = identyfikatorSwiadczeniodawcyParam.addChildElement(AuthNamespaceUtil._Value_QNAME);
-        SOAPElement typeStringValue = typeValue.addChildElement(AuthNamespaceUtil._StringValue_QNAME);
-        typeStringValue.addTextNode(INDETYFIKATOR_SWIADCZENIODAWCY);
-
-        return identyfikatorSwiadczeniodawcyParam;
-    }
-
-    private SOAPElement loginParam(SOAPElement credentials) throws Exception {
-        SOAPElement loginParam = credentials.addChildElement(AuthNamespaceUtil._Item_QNAME);
-        SOAPElement loginParamName = loginParam.addChildElement(AuthNamespaceUtil._Name_QNAME);
-        loginParamName.addTextNode("login");
-        SOAPElement loginParamValue = loginParam.addChildElement(AuthNamespaceUtil._Value_QNAME);
-        SOAPElement loginParamValueStringValue = loginParamValue.addChildElement(AuthNamespaceUtil._StringValue_QNAME);
-        loginParamValueStringValue.addTextNode(LOGIN);
-
-        return loginParam;
+        return itemParam;
     }
 }
