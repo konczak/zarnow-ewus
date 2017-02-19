@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import pl.konczak.nzoz.ewus.client.ewus.AccessDatabse;
 import pl.konczak.nzoz.ewus.client.ewus.AuthClient;
 import pl.konczak.nzoz.ewus.client.ewus.BrokerClient;
 import pl.konczak.nzoz.ewus.client.old.AuthenticationClient;
@@ -61,6 +62,16 @@ public class EwusApi {
                     method = RequestMethod.GET)
     public HttpEntity<Void> check() throws Exception {
         brokerClient.checkCWU();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/db",
+                    method = RequestMethod.GET)
+    public HttpEntity<Void> db() {
+        AccessDatabse accessDatabse = new AccessDatabse();
+
+        accessDatabse.connect();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
