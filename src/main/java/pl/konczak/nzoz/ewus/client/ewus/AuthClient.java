@@ -1,13 +1,20 @@
 package pl.konczak.nzoz.ewus.client.ewus;
 
 import java.net.URL;
+import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import pl.konczak.nzoz.ewus.client.old.LoginResponse;
+
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
+import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.SOAPHeaderElement;
 import javax.xml.soap.SOAPMessage;
 
 @Component
@@ -21,7 +28,7 @@ public class AuthClient {
         this.authLoginRequestFactory = authLoginRequestFactory;
     }
 
-    public void login() throws Exception {
+    public LoginResponse login() throws Exception {
         LOGGER.debug("login");
         SOAPMessage message = authLoginRequestFactory.create();
 
@@ -40,5 +47,23 @@ public class AuthClient {
 
         connection.close();
         LOGGER.info("login ends");
+
+        SOAPHeader sOAPHeader = response.getSOAPHeader();
+
+        Iterator headerElements = sOAPHeader.getChildElements(AuthResponseNamespaceUtil._Session_QNAME);
+        SOAPHeaderElement sessionElement = (SOAPHeaderElement) headerElements.next();
+        String sessionId = sessionElement.getAttribute("id");
+
+        headerElements = sOAPHeader.getChildElements(AuthResponseNamespaceUtil._AuthToken_QNAME);
+
+        SOAPHeaderElement authTokenElement = (SOAPHeaderElement) headerElements.next();
+        String authTokenId = authTokenElement.getAttribute("id");
+
+        SOAPBody sOAPBody = response.getSOAPBody();
+        Iterator bodyElements = sOAPBody.getChildElements(AuthResponseNamespaceUtil._LoginReturn_QNAME);
+        SOAPBodyElement loginReturnElement = (SOAPBodyElement) bodyElements.next();
+        String loginReturn = loginReturnElement.getTextContent();
+
+        return new LoginResponse(sessionId, authTokenId, loginReturn);
     }
 }

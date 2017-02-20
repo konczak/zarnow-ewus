@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import pl.konczak.nzoz.ewus.client.old.LoginResponse;
+
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPMessage;
@@ -21,10 +23,10 @@ public class BrokerClient {
         this.checkCWURequestFactory = checkCWURequestFactory;
     }
 
-    public void checkCWU() throws Exception {
+    public void checkCWU(LoginResponse loginResponse) throws Exception {
         LOGGER.debug("checkCWU");
 
-        SOAPMessage message = checkCWURequestFactory.create("C0A608E55701A657867570C2356A89D4", "BSe360M9YpZpjQ+q_uJfdk", "79060804378");
+        SOAPMessage message = checkCWURequestFactory.create(loginResponse.getSession(), loginResponse.getAuthToken(), "79060804378");
 
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection connection = soapConnectionFactory.createConnection();
@@ -43,4 +45,5 @@ public class BrokerClient {
 
         LOGGER.debug("checkCWU ends");
     }
+
 }

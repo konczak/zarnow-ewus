@@ -5,23 +5,38 @@ import pl.konczak.nzoz.ewus.client.old.broker.Session;
 
 public class LoginResponse {
 
-    private Session session;
+    private String session;
 
-    private AuthToken authToken;
+    private String authToken;
 
     private String response;
 
-    public LoginResponse(Session session, AuthToken authToken, String response) {
+    public LoginResponse(String session, String authToken, String response) {
         this.session = session;
         this.authToken = authToken;
         this.response = response;
     }
 
-    public Session getSession() {
+    public LoginResponse(Session session, AuthToken authToken, String response) {
+    }
+
+    public Session getSessionX() {
+        return null;
+    }
+
+    public AuthToken getAuthTokenX() {
+        return null;
+    }
+
+    public String getResponseX() {
+        return null;
+    }
+
+    public String getSession() {
         return session;
     }
 
-    public AuthToken getAuthToken() {
+    public String getAuthToken() {
         return authToken;
     }
 

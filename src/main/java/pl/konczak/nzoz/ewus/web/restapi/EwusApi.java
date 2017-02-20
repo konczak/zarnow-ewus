@@ -42,10 +42,10 @@ public class EwusApi {
 
     @RequestMapping(value = "/login",
                     method = RequestMethod.GET)
-    public HttpEntity<Void> loginSecond() throws Exception {
-        authClient.login();
+    public HttpEntity<LoginResponse> loginSecond() throws Exception {
+        LoginResponse loginResponse = authClient.login();
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET,
@@ -61,7 +61,7 @@ public class EwusApi {
     @RequestMapping(value = "/check",
                     method = RequestMethod.GET)
     public HttpEntity<Void> check() throws Exception {
-        brokerClient.checkCWU();
+        //brokerClient.checkCWU();
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -73,6 +73,16 @@ public class EwusApi {
 
         accessDatabse.connect();
 
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/full",
+                    method = RequestMethod.GET)
+    public HttpEntity<Void> full() throws Exception {
+        LoginResponse loginResponse = authClient.login();
+        
+        brokerClient.checkCWU(loginResponse);
+        
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

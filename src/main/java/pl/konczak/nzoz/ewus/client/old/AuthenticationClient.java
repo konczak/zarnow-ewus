@@ -96,9 +96,9 @@ public class AuthenticationClient
                 });
 
         LOGGER.info("loginResponse session <{}> authToken <{}> response <{}>",
-                loginResponse.getSession().getId(),
-                loginResponse.getAuthToken().getId(),
-                loginResponse.getResponse());
+                loginResponse.getSessionX().getId(),
+                loginResponse.getAuthTokenX().getId(),
+                loginResponse.getResponseX());
 
         LOGGER.debug("complete: login");
 

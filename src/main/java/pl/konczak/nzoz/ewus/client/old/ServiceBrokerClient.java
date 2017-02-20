@@ -84,8 +84,8 @@ public class ServiceBrokerClient
 //                        soapHeader.addAttribute(null, null);
 //                        new QName("http://xml.kamsoft.pl/ws/common", "session", "ns1"
 
-                        StringSource headerSource = new StringSource("<session id=\"" + loginResponse.getSession() + "\" xmlns:ns1=\"http://xml.kamsoft.pl/ws/common\"/>"
-                                + "<authToken id=\"" + loginResponse.getAuthToken() + "\" xmlns:ns1=\"http://xml.kamsoft.pl/ws/common\"/>");
+                        StringSource headerSource = new StringSource("<session id=\"" + loginResponse.getSessionX() + "\" xmlns:ns1=\"http://xml.kamsoft.pl/ws/common\"/>"
+                                + "<authToken id=\"" + loginResponse.getAuthTokenX() + "\" xmlns:ns1=\"http://xml.kamsoft.pl/ws/common\"/>");
                         try {
                             Transformer transformer = TransformerFactory.newInstance().newTransformer();
                             transformer.transform(headerSource, soapHeader.getResult());
