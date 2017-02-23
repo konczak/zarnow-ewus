@@ -17,6 +17,7 @@ public class SOAPFormatter {
             Transformer tf = tff.newTransformer();
 
             // Set formatting
+//            tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             tf.setOutputProperty(OutputKeys.INDENT, "yes");
             tf.setOutputProperty("{http://xml.apache.org/xslt}indent-amount",
                     "2");
