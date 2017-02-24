@@ -13,7 +13,7 @@ public class Pacjent {
 
     @XmlElement(name = "status_ubezp",
                 namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
-    private String statusUbezp;
+    private StatusUbezp statusUbezp;
 
     @XmlElement(name = "imie",
                 namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
@@ -31,11 +31,11 @@ public class Pacjent {
         this.dataWaznosciPotwierdzenia = dataWaznosciPotwierdzenia;
     }
 
-    public String getStatusUbezp() {
+    public StatusUbezp getStatusUbezp() {
         return statusUbezp;
     }
 
-    public void setStatusUbezp(String statusUbezp) {
+    public void setStatusUbezp(StatusUbezp statusUbezp) {
         this.statusUbezp = statusUbezp;
     }
 

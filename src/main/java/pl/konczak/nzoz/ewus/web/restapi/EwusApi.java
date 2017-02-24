@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pl.konczak.nzoz.ewus.client.ewus.AccessDatabse;
@@ -43,14 +44,15 @@ public class EwusApi {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
-    @RequestMapping(value = "/full",
-                    method = RequestMethod.GET)
-    public HttpEntity<Void> full() throws Exception {
+
+    @RequestMapping(value = "/check",
+                    method = RequestMethod.GET,
+                    params = {"pesel"})
+    public HttpEntity<CheckStatusResponse> check(@RequestParam("pesel") String pesel) throws Exception {
         LoginResponse loginResponse = authClient.login();
-        
-        brokerClient.checkCWU(loginResponse);
-        
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        CheckStatusResponse checkStatusResponse = brokerClient.checkCWU(loginResponse, pesel);
+
+        return new ResponseEntity<>(checkStatusResponse, HttpStatus.OK);
     }
 }

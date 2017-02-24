@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 
 import pl.konczak.nzoz.ewus.client.ewus.response.CheckCWUResponse;
+import pl.konczak.nzoz.ewus.web.restapi.CheckStatusResponse;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -26,10 +27,10 @@ public class BrokerClient {
         this.checkCWURequestFactory = checkCWURequestFactory;
     }
 
-    public void checkCWU(LoginResponse loginResponse) throws Exception {
+    public CheckStatusResponse checkCWU(LoginResponse loginResponse, String pesel) throws Exception {
         LOGGER.debug("checkCWU");
 
-        SOAPMessage message = checkCWURequestFactory.create(loginResponse.getSession(), loginResponse.getAuthToken(), "79060804378");
+        SOAPMessage message = checkCWURequestFactory.create(loginResponse.getSession(), loginResponse.getAuthToken(), pesel);
 
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection connection = soapConnectionFactory.createConnection();
@@ -58,10 +59,17 @@ public class BrokerClient {
                 readSatus(checkCWUResponse),
                 readPesel(checkCWUResponse),
                 readFullname(checkCWUResponse));
+
+        return new CheckStatusResponse(readSatus(checkCWUResponse),
+                readPesel(checkCWUResponse),
+                readImie(checkCWUResponse),
+                readNazwisko(checkCWUResponse),
+                readStatusUbezpieczenia(checkCWUResponse),
+                readOznaczenieRecept(checkCWUResponse));
     }
 
-    private String readSatus(CheckCWUResponse checkCWUResponse) {
-        return String.valueOf(checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getStatusCwu());
+    private int readSatus(CheckCWUResponse checkCWUResponse) {
+        return checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getStatusCwu();
     }
 
     private String readPesel(CheckCWUResponse checkCWUResponse) {
@@ -69,9 +77,42 @@ public class BrokerClient {
     }
 
     private String readFullname(CheckCWUResponse checkCWUResponse) {
+        if (checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent() == null) {
+            return null;
+        }
         return checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getNazwisko()
                 + " "
                 + checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getImie();
     }
+
+    private String readNazwisko(CheckCWUResponse checkCWUResponse) {
+        if (checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent() == null) {
+            return null;
+        }
+        return checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getNazwisko();
+    }
+
+    private String readImie(CheckCWUResponse checkCWUResponse) {
+        if (checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent() == null) {
+            return null;
+        }
+        return checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getImie();
+    }
+
+    private String readOznaczenieRecept(CheckCWUResponse checkCWUResponse) {
+        if (checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent() == null) {
+            return null;
+        }
+        return checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getStatusUbezp().getOznRec();
+    }
+
+    private int readStatusUbezpieczenia(CheckCWUResponse checkCWUResponse) {
+        if (checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent() == null) {
+            return 0;
+        }
+        return checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getStatusUbezp().getStatus();
+    }
+
+    
 
 }
