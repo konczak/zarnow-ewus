@@ -14,17 +14,17 @@ public class CheckStatusResponse {
 
     private final String oznaczenieRecept;
 
-    public CheckStatusResponse(int status,
+    public CheckStatusResponse(PersonSearchStatus personSearchStatus,
             String pesel,
             String imie, String nazwisko,
-            int statusUbezpieczenia,
+            boolean ubezpieczony,
             String oznaczenieRecept) {
-        this.status = PersonSearchStatus.convert(status);
+        this.status = personSearchStatus;
         this.pesel = pesel;
         this.imie = imie;
         this.nazwisko = nazwisko;
         this.oznaczenieRecept = oznaczenieRecept;
-        this.ubezpieczony = statusUbezpieczenia == 1;
+        this.ubezpieczony = ubezpieczony;
     }
 
     public PersonSearchStatus getStatus() {

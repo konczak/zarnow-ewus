@@ -8,31 +8,47 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.konczak.nzoz.ewus.client.ewus.AccessDatabse;
-import pl.konczak.nzoz.ewus.client.ewus.AuthClient;
-import pl.konczak.nzoz.ewus.client.ewus.BrokerClient;
-import pl.konczak.nzoz.ewus.client.ewus.LoginResponse;
+import pl.konczak.nzoz.ewus.db.AccessDatabse;
+import pl.konczak.nzoz.ewus.client.ewus.checkcwu.CheckCWUStatusFacade;
+import pl.konczak.nzoz.ewus.client.ewus.auth.Credentials;
+import pl.konczak.nzoz.ewus.client.ewus.auth.LoginService;
+import pl.konczak.nzoz.ewus.client.ewus.checkcwu.response.CheckCWUResponse;
 
 @RestController
 @RequestMapping("/ewus")
 public class EwusApi {
 
-    private final AuthClient authClient;
+    private final LoginService loginService;
 
-    private final BrokerClient brokerClient;
+    private final CheckCWUStatusFacade checkCWUStatusFacade;
 
-    public EwusApi(AuthClient authClient,
-            BrokerClient brokerClient) {
-        this.authClient = authClient;
-        this.brokerClient = brokerClient;
+    private final CheckStatusResponseFactory checkStatusResponseFactory;
+
+    public EwusApi(LoginService loginService,
+            CheckCWUStatusFacade checkCWUStatusFacade,
+            CheckStatusResponseFactory checkStatusResponseFactory) {
+        this.loginService = loginService;
+        this.checkCWUStatusFacade = checkCWUStatusFacade;
+        this.checkStatusResponseFactory = checkStatusResponseFactory;
     }
 
     @RequestMapping(value = "/login",
                     method = RequestMethod.GET)
     public HttpEntity<LoginResponse> loginSecond() throws Exception {
-        LoginResponse loginResponse = authClient.login();
+        Credentials credentials = loginService.login();
 
-        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
+        return new ResponseEntity<>(new LoginResponse(credentials), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/check",
+                    method = RequestMethod.GET,
+                    params = {"pesel"})
+    public HttpEntity<CheckStatusResponse> check(@RequestParam("pesel") String pesel) throws Exception {
+        CheckCWUResponse checkCWUResponse = checkCWUStatusFacade.checkCWU(pesel);
+
+        CheckStatusResponse checkStatusResponse = checkStatusResponseFactory.create(checkCWUResponse);
+
+        return new ResponseEntity<>(checkStatusResponse, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/db",
@@ -43,16 +59,5 @@ public class EwusApi {
         accessDatabse.connect();
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/check",
-                    method = RequestMethod.GET,
-                    params = {"pesel"})
-    public HttpEntity<CheckStatusResponse> check(@RequestParam("pesel") String pesel) throws Exception {
-        LoginResponse loginResponse = authClient.login();
-
-        CheckStatusResponse checkStatusResponse = brokerClient.checkCWU(loginResponse, pesel);
-
-        return new ResponseEntity<>(checkStatusResponse, HttpStatus.OK);
     }
 }
