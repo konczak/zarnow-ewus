@@ -31,7 +31,9 @@ public class CheckCWUStatusResponsePersistence {
         if (!ewusPersistenceConfiguration.isExecute()) {
             return;
         }
-        String pathToFile = createFilePath(pesel);
+        LocalDateTime now = LocalDateTime.now();
+        String pathToFolder = createDirectory(now);
+        String pathToFile = createFileToPath(pathToFolder, pesel, now);
 
         File file = new File(pathToFile);
         file.createNewFile();
@@ -43,11 +45,19 @@ public class CheckCWUStatusResponsePersistence {
         LOGGER.info("CheckCWUStatusResponse save to file <{}>", pathToFile);
     }
 
-    private String createFilePath(String pesel) {
-        LocalDateTime now = LocalDateTime.now();
+    private String createDirectory(LocalDateTime now) {
+        String folderdate = now.format(DateTimeFormatter.ISO_DATE);
+        String folderPath = ewusPersistenceConfiguration.getFolder() + folderdate;
 
-        String date = now.format(dateTimeFormatter);
+        File directory = new File(folderPath);
+        directory.mkdirs();
 
-        return ewusPersistenceConfiguration.getFolder() + date + "_" + pesel + ".xml";
+        return folderPath;
+    }
+
+    private String createFileToPath(String pathToFolder, String pesel, LocalDateTime now) {
+        String fulldate = now.format(dateTimeFormatter);
+
+        return pathToFolder + "/" + fulldate + "_" + pesel + ".xml";
     }
 }

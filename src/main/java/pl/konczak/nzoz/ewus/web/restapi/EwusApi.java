@@ -57,6 +57,14 @@ public class EwusApi {
         return new ResponseEntity<>(checkStatusResponse, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/check/all",
+                    method = RequestMethod.GET)
+    public HttpEntity<Void> checkAll() throws Exception {
+        checkCWUStatusFacade.checkCWUForAll();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/load/pesel",
                     method = RequestMethod.GET)
     public HttpEntity<Page<String>> loadPeselList(Pageable pageable) {

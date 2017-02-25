@@ -41,6 +41,10 @@ public class CheckCWUStatusService {
 
         checkCWUStatusResponsePersistence.persist(pesel, response);
 
+        if (response.getSOAPBody().hasFault()) {
+            LOGGER.warn("Response for <{}> cotains fault", pesel);
+        }
+
         CheckCWUResponse checkCWUResponse = checkCWUResponseFactory.create(response);
 
         LOGGER.info("checkCWU completed");
