@@ -1,4 +1,4 @@
-package pl.konczak.nzoz.ewus.web.restapi;
+package pl.konczak.nzoz.ewus.web.restapi.ewus;
 
 public class CheckStatusResponse {
 
