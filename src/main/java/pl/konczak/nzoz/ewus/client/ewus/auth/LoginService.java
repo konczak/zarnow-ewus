@@ -43,6 +43,6 @@ public class LoginService {
     @CacheEvict(cacheNames = "ewus-credentials")
     public void clearCachedCredentials() {
         //do nothing
-        LOGGER.info("credentials cache cleared");
+        LOGGER.info("ewus-credentials cache cleared");
     }
 }
