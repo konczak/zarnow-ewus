@@ -93,7 +93,7 @@ public class CheckCWUStatusFacade {
 
         end = System.currentTimeMillis();
 
-        LOGGER.info("finished checkCWU for <{}> pesel of <{}> found and <{}> has failed, process took <{}>s",
+        LOGGER.info("finished checkCWU for <{} of {}> found pesel numbers and <{}> has failed, process took <{}>s",
                 count.get(),
                 totalNumberOfPesel,
                 countOfFails.get(),
