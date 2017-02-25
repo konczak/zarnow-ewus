@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 import pl.konczak.nzoz.ewus.client.ewus.auth.Credentials;
 import pl.konczak.nzoz.ewus.client.ewus.auth.LoginService;
+import pl.konczak.nzoz.ewus.client.ewus.auth.LogoutService;
 import pl.konczak.nzoz.ewus.client.ewus.checkcwu.response.CheckCWUResponse;
 
-import javax.xml.soap.SOAPMessage;
 
 @Service
 public class CheckCWUStatusFacade {
@@ -17,40 +17,26 @@ public class CheckCWUStatusFacade {
 
     private final LoginService loginService;
 
-    private final CheckCWURequestFactory checkCWURequestFactory;
+    private final CheckCWUStatusService checkCWUStatusService;
 
-    private final BrokerClient brokerClient;
+    private final LogoutService logoutService;
 
-    private final CheckCWUStatusResponsePersistence checkCWUStatusResponsePersistence;
-
-    private final CheckCWUResponseFactory checkCWUResponseFactory;
-
-    public CheckCWUStatusFacade(LoginService loginService,
-            CheckCWURequestFactory checkCWURequestFactory,
-            BrokerClient brokerClient,
-            CheckCWUStatusResponsePersistence checkCWUStatusResponsePersistence,
-            CheckCWUResponseFactory checkCWUResponseFactory) {
+    public CheckCWUStatusFacade(LoginService loginService, CheckCWUStatusService checkCWUStatusService, LogoutService logoutService) {
         this.loginService = loginService;
-        this.checkCWURequestFactory = checkCWURequestFactory;
-        this.brokerClient = brokerClient;
-        this.checkCWUStatusResponsePersistence = checkCWUStatusResponsePersistence;
-        this.checkCWUResponseFactory = checkCWUResponseFactory;
+        this.checkCWUStatusService = checkCWUStatusService;
+        this.logoutService = logoutService;
     }
 
     public CheckCWUResponse checkCWU(String pesel) throws Exception {
-        LOGGER.info("going to checkCWU <{}>", pesel);
+        LOGGER.debug("start checkCWU proces");
 
         Credentials credentials = loginService.login();
 
-        SOAPMessage request = checkCWURequestFactory.create(credentials, pesel);
+        CheckCWUResponse checkCWUResponse = checkCWUStatusService.checkCWU(credentials, pesel);
 
-        SOAPMessage response = brokerClient.send(request);
+        logoutService.logout(credentials);
 
-        checkCWUStatusResponsePersistence.persist(pesel, response);
-
-        CheckCWUResponse checkCWUResponse = checkCWUResponseFactory.create(response);
-        
-        LOGGER.info("checkCWU completed");
+        LOGGER.debug("checkCWU proces completed");
 
         return checkCWUResponse;
     }

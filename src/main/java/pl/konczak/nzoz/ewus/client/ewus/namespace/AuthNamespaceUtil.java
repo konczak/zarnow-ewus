@@ -18,4 +18,6 @@ public final class AuthNamespaceUtil {
 
     public final static QName _StringValue_QNAME = new QName("http://xml.kamsoft.pl/ws/kaas/login_types", "stringValue", "auth");
 
+    public final static QName _Logout_QNAME = new QName("http://xml.kamsoft.pl/ws/kaas/login_types", "logout", "auth");
+
 }

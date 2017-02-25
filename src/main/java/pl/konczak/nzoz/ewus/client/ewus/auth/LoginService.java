@@ -2,6 +2,7 @@ package pl.konczak.nzoz.ewus.client.ewus.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,11 @@ public class LoginService {
                 credentials.getResponse());
 
         return credentials;
+    }
+
+    @CacheEvict(cacheNames = "ewus-credentials")
+    public void clearCachedCredentials() {
+        //do nothing
+        LOGGER.info("credentials cache cleared");
     }
 }
