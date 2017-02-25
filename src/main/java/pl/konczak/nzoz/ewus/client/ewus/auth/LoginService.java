@@ -12,14 +12,14 @@ public class LoginService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginService.class);
 
-    private final AuthLoginRequestFactory authLoginRequestFactory;
+    private final LoginRequestFactory loginRequestFactory;
 
     private final AuthClient authClient;
 
     private final CredentialsFactory credentialsFactory;
 
-    public LoginService(AuthLoginRequestFactory authLoginRequestFactory, AuthClient authClient, CredentialsFactory credentialsFactory) {
-        this.authLoginRequestFactory = authLoginRequestFactory;
+    public LoginService(LoginRequestFactory loginRequestFactory, AuthClient authClient, CredentialsFactory credentialsFactory) {
+        this.loginRequestFactory = loginRequestFactory;
         this.authClient = authClient;
         this.credentialsFactory = credentialsFactory;
     }
@@ -27,8 +27,8 @@ public class LoginService {
     @Cacheable(value = "ewus-credentials")
     public Credentials login() throws Exception {
         LOGGER.info("login");
-        SOAPMessage authLoginRequest = authLoginRequestFactory.create();
-        SOAPMessage response = authClient.login(authLoginRequest);
+        SOAPMessage authLoginRequest = loginRequestFactory.create();
+        SOAPMessage response = authClient.send(authLoginRequest);
         Credentials credentials = credentialsFactory.parse(response);
 
         LOGGER.info("logged with session <{}> authToken <{}> response <{}>",

@@ -23,8 +23,8 @@ public class AuthClient {
         this.endpoint = new URL(url);
     }
 
-    public SOAPMessage login(SOAPMessage request) throws Exception {
-        LOGGER.debug("login");
+    public SOAPMessage send(SOAPMessage request) throws Exception {
+        LOGGER.debug("sending request to Auth WS");
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection connection = soapConnectionFactory.createConnection();
 
@@ -32,7 +32,7 @@ public class AuthClient {
 
         connection.close();
 
-        LOGGER.debug("login ends");
+        LOGGER.debug("request to Auth WS completed");
 
         return response;
     }

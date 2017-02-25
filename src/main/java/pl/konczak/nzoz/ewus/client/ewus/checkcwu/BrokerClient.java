@@ -23,9 +23,8 @@ public class BrokerClient {
         this.endpoint = new URL(url);
     }
 
-    public SOAPMessage checkCWU(SOAPMessage request) throws Exception {
-        LOGGER.debug("checkCWU");
-
+    public SOAPMessage send(SOAPMessage request) throws Exception {
+        LOGGER.debug("sending request to Broker WS");
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection connection = soapConnectionFactory.createConnection();
 
@@ -33,7 +32,7 @@ public class BrokerClient {
 
         connection.close();
 
-        LOGGER.debug("checkCWU ends");
+        LOGGER.debug("request to Broker WS completed");
 
         return response;
     }

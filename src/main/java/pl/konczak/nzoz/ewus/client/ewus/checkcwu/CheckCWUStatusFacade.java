@@ -44,7 +44,7 @@ public class CheckCWUStatusFacade {
 
         SOAPMessage request = checkCWURequestFactory.create(credentials, pesel);
 
-        SOAPMessage response = brokerClient.checkCWU(request);
+        SOAPMessage response = brokerClient.send(request);
 
         checkCWUStatusResponsePersistence.persist(pesel, response);
 

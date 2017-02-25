@@ -15,11 +15,11 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
 @Component
-public class AuthLoginRequestFactory {
+public class LoginRequestFactory {
 
     private final EwusCredentialsConfiguration ewusCredentialsConfiguration;
 
-    public AuthLoginRequestFactory(EwusCredentialsConfiguration ewusCredentialsConfiguration) {
+    public LoginRequestFactory(EwusCredentialsConfiguration ewusCredentialsConfiguration) {
         this.ewusCredentialsConfiguration = ewusCredentialsConfiguration;
     }
 
