@@ -33,7 +33,7 @@ public class CheckCWUStatusResponsePersistence {
         }
         LocalDateTime now = LocalDateTime.now();
         String pathToFolder = createDirectory(now);
-        String pathToFile = createFileToPath(pathToFolder, pesel, now);
+        String pathToFile = createPathToFile(pathToFolder, pesel, now);
 
         File file = new File(pathToFile);
         file.createNewFile();
@@ -55,7 +55,7 @@ public class CheckCWUStatusResponsePersistence {
         return folderPath;
     }
 
-    private String createFileToPath(String pathToFolder, String pesel, LocalDateTime now) {
+    private String createPathToFile(String pathToFolder, String pesel, LocalDateTime now) {
         String fulldate = now.format(dateTimeFormatter);
 
         return pathToFolder + "/" + fulldate + "_" + pesel + ".xml";

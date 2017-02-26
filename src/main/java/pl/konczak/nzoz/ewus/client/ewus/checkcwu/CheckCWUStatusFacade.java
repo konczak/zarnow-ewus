@@ -1,7 +1,5 @@
 package pl.konczak.nzoz.ewus.client.ewus.checkcwu;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -30,14 +28,18 @@ public class CheckCWUStatusFacade {
 
     private final PacjentPagableRepository pacjentPagableRepository;
 
+    private final CheckCWUForAllReportPersistence checkCWUForAllReportPersistence;
+
     public CheckCWUStatusFacade(LoginService loginService,
             CheckCWUStatusService checkCWUStatusService,
             LogoutService logoutService,
-            PacjentPagableRepository pacjentPagableRepository) {
+            PacjentPagableRepository pacjentPagableRepository,
+            CheckCWUForAllReportPersistence checkCWUForAllReportPersistence) {
         this.loginService = loginService;
         this.checkCWUStatusService = checkCWUStatusService;
         this.logoutService = logoutService;
         this.pacjentPagableRepository = pacjentPagableRepository;
+        this.checkCWUForAllReportPersistence = checkCWUForAllReportPersistence;
     }
 
     public CheckCWUResponse checkCWU(String pesel) throws Exception {
@@ -57,28 +59,31 @@ public class CheckCWUStatusFacade {
     public void checkCWUForAll() throws Exception {
         LOGGER.debug("start checkCWU all proces");
 
+        CheckCWUForAllReport.CheckCWUForAllReportBuilder builder = CheckCWUForAllReport.builder();
+        builder.registerStart();
+
         Credentials credentials = loginService.login();
 
-        AtomicLong count = new AtomicLong(0);
-        AtomicLong countOfFails = new AtomicLong(0);
         final int size = 100;
         int pageNumber = 0;
-        long totalNumberOfPesel, start, end;
-        start = System.currentTimeMillis();
         Page<String> page = pacjentPagableRepository.findPage(pageNumber, size);
-        totalNumberOfPesel = page.getTotalElements();
+        builder.withCountOfAllPesel(page.getTotalElements());
 
         while (page.hasContent()) {
             page.getContent().stream()
                     .filter(pesel -> !pesel.isEmpty())
+                    .filter(pesel -> pesel.length() == 11)
                     .filter(pesel -> !PESEL_NEW_CHILD.equals(pesel))
                     .filter(pesel -> !pesel.endsWith(PESEL_INCORRECT_PREFIX))
                     .forEach(pesel -> {
-                        count.incrementAndGet();
+                        builder.incrementCountOfCheckedPesel();
                         try {
-                            checkCWUStatusService.checkCWU(credentials, pesel);
+                            CheckCWUResponse checkCWUResponse = checkCWUStatusService.checkCWU(credentials, pesel);
+                            if (CheckCWUResponseAnalyzeUtil.isUbezpieczony(checkCWUResponse)) {
+                                builder.addPeselBezUbezpieczenia(pesel);
+                            }
                         } catch (Exception ex) {
-                            countOfFails.incrementAndGet();
+                            builder.addFailedPesel(pesel);
                             LOGGER.error("Failed to checkCWU for <{}> because <{}>", pesel, ex.getMessage());
                         }
                     });
@@ -91,13 +96,17 @@ public class CheckCWUStatusFacade {
 
         logoutService.logout(credentials);
 
-        end = System.currentTimeMillis();
+        builder.registerEnd();
+
+        CheckCWUForAllReport checkCWUForAllReport = builder.build();
+
+        checkCWUForAllReportPersistence.persist(checkCWUForAllReport);
 
         LOGGER.info("finished checkCWU for <{} of {}> found pesel numbers and <{}> has failed, process took <{}>s",
-                count.get(),
-                totalNumberOfPesel,
-                countOfFails.get(),
-                (end - start) / 1000);
+                checkCWUForAllReport.getCountOfCheckedPesel(),
+                checkCWUForAllReport.getCountOfAllPesel(),
+                checkCWUForAllReport.getCountOfFailedPesels(),
+                checkCWUForAllReport.getProcessTimeInSeconds());
 
         LOGGER.debug("checkCWU all proces completed");
     }
