@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import pl.konczak.nzoz.ewus.util.SOAPFormatterUtil;
+
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPMessage;
@@ -24,7 +26,10 @@ public class BrokerClient {
     }
 
     public SOAPMessage send(SOAPMessage request) throws Exception {
-        LOGGER.debug("sending request to Broker WS");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("sending request to Broker WS");
+            LOGGER.debug(SOAPFormatterUtil.format(request));
+        }
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection connection = soapConnectionFactory.createConnection();
 
@@ -32,7 +37,10 @@ public class BrokerClient {
 
         connection.close();
 
-        LOGGER.debug("request to Broker WS completed");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("request to Broker WS completed");
+            LOGGER.debug(SOAPFormatterUtil.format(request));
+        }
 
         return response;
     }
