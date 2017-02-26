@@ -1,6 +1,6 @@
 package pl.konczak.nzoz.ewus.web.restapi.ewus;
 
-import pl.konczak.nzoz.ewus.client.ewus.auth.Credentials;
+import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
 
 public class LoginResponse {
 

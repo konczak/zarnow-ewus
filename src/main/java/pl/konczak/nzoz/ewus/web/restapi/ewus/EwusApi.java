@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.konczak.nzoz.ewus.client.ewus.auth.Credentials;
-import pl.konczak.nzoz.ewus.client.ewus.auth.LoginService;
-import pl.konczak.nzoz.ewus.client.ewus.checkcwu.CheckCWUStatusFacade;
-import pl.konczak.nzoz.ewus.client.ewus.checkcwu.response.CheckCWUResponse;
+import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
+import pl.konczak.nzoz.ewus.domain.authentication.LoginService;
+import pl.konczak.nzoz.ewus.domain.checkcwu.CheckCWUStatusFacade;
+import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
 
 @RestController
 @RequestMapping("/ewus")

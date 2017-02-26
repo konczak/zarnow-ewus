@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import pl.konczak.nzoz.ewus.client.ewus.checkcwu.CheckCWUStatusFacade;
+import pl.konczak.nzoz.ewus.domain.checkcwu.CheckCWUStatusFacade;
 
 @Component
 public class CheckCWUForAllJob {

@@ -2,7 +2,7 @@ package pl.konczak.nzoz.ewus.web.restapi.ewus;
 
 import org.springframework.stereotype.Component;
 
-import pl.konczak.nzoz.ewus.client.ewus.checkcwu.response.CheckCWUResponse;
+import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
 
 @Component
 public class CheckStatusResponseFactory {
