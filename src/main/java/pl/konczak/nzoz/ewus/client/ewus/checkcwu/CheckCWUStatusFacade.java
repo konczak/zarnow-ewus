@@ -79,7 +79,7 @@ public class CheckCWUStatusFacade {
                         builder.incrementCountOfCheckedPesel();
                         try {
                             CheckCWUResponse checkCWUResponse = checkCWUStatusService.checkCWU(credentials, pesel);
-                            if (CheckCWUResponseAnalyzeUtil.isUbezpieczony(checkCWUResponse)) {
+                            if (!CheckCWUResponseAnalyzeUtil.isUbezpieczony(checkCWUResponse)) {
                                 builder.addPeselBezUbezpieczenia(pesel);
                             }
                         } catch (Exception ex) {
