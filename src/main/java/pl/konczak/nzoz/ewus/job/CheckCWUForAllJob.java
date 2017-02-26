@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +17,19 @@ public class CheckCWUForAllJob {
 
     private final CheckCWUStatusFacade checkCWUStatusFacade;
 
-    public CheckCWUForAllJob(CheckCWUStatusFacade checkCWUStatusFacade) {
+    private final boolean onlyStartAndEndOfTheMonth;
+
+    public CheckCWUForAllJob(CheckCWUStatusFacade checkCWUStatusFacade,
+            @Value("${job.checkCWUForAll.only-start-and-end-of-the-month}") boolean onlyStartAndEndOfTheMonth) {
         this.checkCWUStatusFacade = checkCWUStatusFacade;
+        this.onlyStartAndEndOfTheMonth = onlyStartAndEndOfTheMonth;
     }
 
     @Scheduled(cron = "${job.checkCWUForAll.cron}")
     public void run() {
         LocalDate now = LocalDate.now();
-        if (!isOneOfTwoFirstDaysOfTheMonth(now)
+        if (onlyStartAndEndOfTheMonth
+                && !isOneOfTwoFirstDaysOfTheMonth(now)
                 && !isOneOfTwoEndDaysOfTheMonth(now)) {
             return;
         }
