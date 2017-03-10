@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.konczak.nzoz</groupId>
-    <artifactId>ewus</artifactId>
-    <version>0.1.0</version>
+    <artifactId>zarnow-ewus</artifactId>
+    <version>1.0.0</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
