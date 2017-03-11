@@ -24,10 +24,11 @@ to znaczy że Java w wymaganej wersji jest już zainstalowana i można przejść
 Dostarczone pliki i foldery:
  
  - **_logs/_**
- - **_results/_**
- - **_zarnow-ewus-1.0.0.jar_** 
+ - **_results/_** 
  - **_application.properties_**
+ - **_instrukcja.html_**
  - **_logback.xml_**
+ - **_zarnow-ewus-1.0.0.jar_**
 
 umieszczamy w wybranym przez siebie folderze np. _"C:/zarnow-ewus/"_.
 
@@ -211,3 +212,5 @@ Następnego dnia wyciągnąć z raportu listę numerów PESEL zidentyfikowanych 
 2. Zapisywanie wynikowej listy osób rozpoznanych jako nie posiadających ubezpieczenia do pliku typu CSV lub Excel - jak będę wiedział w jakim formacie miało by to być to można to zrobić. Możliwe jest również zapisywanie pozostałych danych.
 3. Automatyczne porównywanie z poprzednim wynikiem sprawdzenia, lub zbieranie tego do pliku Excela. Możliwe byłoby odczytywanie pliku Excela oraz jego modyfikacja np. dodanie kolumny zawierającej status ubezpieczenia w kolejnym dniu. Jednakże do tego celu efektywniejsze byłoby użycie bazy danych gdzie statusy byłby by składowane zaś sama aplikacja (lub odrębna) czytała by zeń dane i generowała plik Excel. 
 4. Na ten moment gdy stwierdzasz że pacjent powinien złożyć deklarację bo eWUŚ go wyrzuci na koniec miesiąca (na podstawie zmiany statusu ubezpieczenia 1 dnia roboczego) wprowadzasz stosowny marker do bazy ProgramNZOZ. Mogłoby to się dziać automatycznie. Jedynie na ten moment nie jestem pewien czy będę w stanie zapisywać do bazy _Bazap_. Mianowicie przy odczytywaniu listy numerów PESEL musiałem wyciągnąć wszystkie wpisy i dopiero w nich wyszukiwać zamiast wysłać zapytanie do bazy i dostać jedynie interesujące (np. te które są poprawnymi numerami PESEL jak opisane w sekcji [sprawdzania wszystkich numerów](#business-check-all-patients)).
+5. Mogę zrobić prostą stronę Internetową (w osobnej aplikacji) która łączyła by się z tą aplikacją przez REST API. Ta strona robiła by praktycznie to samo co ta dostarczana przez eWUŚ z tą różnicą że nie trzeba byłoby się logować - jedynie byłby pojedynczy input na PESEL i następnie byłby wyświetlany wynik. Jednakże byłoby to samo co np. Kasia teraz robi w rejestracji czyli kopiuje PESEL z ProgramNZOZ do mMedica i tam sprawdza. Jedyna różnica byłaby taka że można by udostępnić tą stronę w sieci wewnętrznej w Żarnowie bez ograniczenia liczby równocześnie działających instancji tak jak jest w tej chwili.
+Po odpowiednich modyfikacjach możliwe byłoby sprawdzenie kilka PESELI jednocześnie np. do max 10, choć nie wiem czy miałoby to jakikolwiek sens.
