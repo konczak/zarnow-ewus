@@ -1,7 +1,7 @@
 package pl.konczak.nzoz.ewus;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -11,7 +11,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class);
+        SpringApplicationBuilder builder = new SpringApplicationBuilder(Application.class);
+        builder.headless(false);
+        builder.run(args);
     }
 
 }
