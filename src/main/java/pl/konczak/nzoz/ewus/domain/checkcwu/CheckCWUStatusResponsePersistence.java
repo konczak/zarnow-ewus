@@ -22,9 +22,13 @@ public class CheckCWUStatusResponsePersistence {
 
     private final DateTimeFormatter dateTimeFormatter;
 
-    public CheckCWUStatusResponsePersistence(EwusPersistenceConfiguration ewusPersistenceConfiguration) {
+    private final CheckCWUStatusResponsePersistenceSuffixFactory checkCWUStatusResponsePersistenceSuffixFactory;
+
+    public CheckCWUStatusResponsePersistence(EwusPersistenceConfiguration ewusPersistenceConfiguration,
+            CheckCWUStatusResponsePersistenceSuffixFactory checkCWUStatusResponsePersistenceSuffixFactory) {
         this.ewusPersistenceConfiguration = ewusPersistenceConfiguration;
         this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+        this.checkCWUStatusResponsePersistenceSuffixFactory = checkCWUStatusResponsePersistenceSuffixFactory;
     }
 
     void persist(String pesel, SOAPMessage message) throws Exception {
@@ -33,7 +37,8 @@ public class CheckCWUStatusResponsePersistence {
         }
         LocalDateTime now = LocalDateTime.now();
         String pathToFolder = createDirectory(now);
-        String pathToFile = createPathToFile(pathToFolder, pesel, now);
+        String status = checkCWUStatusResponsePersistenceSuffixFactory.create(message);
+        String pathToFile = createPathToFile(pathToFolder, pesel, now, status);
 
         File file = new File(pathToFile);
         file.createNewFile();
@@ -55,9 +60,9 @@ public class CheckCWUStatusResponsePersistence {
         return folderPath;
     }
 
-    private String createPathToFile(String pathToFolder, String pesel, LocalDateTime now) {
+    private String createPathToFile(String pathToFolder, String pesel, LocalDateTime now, String status) {
         String fulldate = now.format(dateTimeFormatter);
 
-        return pathToFolder + "/" + fulldate + "_" + pesel + ".xml";
+        return pathToFolder + "/" + fulldate + "_" + pesel + "_" + status + ".xml";
     }
 }
