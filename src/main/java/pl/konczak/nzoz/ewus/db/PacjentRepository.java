@@ -26,34 +26,34 @@ public class PacjentRepository {
         this.paradoxDatabaseManager = paradoxDatabaseManager;
     }
 
-    @Cacheable(value = "pesel-list")
-    public List<String> findAllPesel() {
-        List<String> listOfPesel = new ArrayList<>();
+    @Cacheable(value = "patient-list")
+    public List<Patient> findAll() {
+        List<Patient> list = new ArrayList<>();
         try {
             Connection connection = paradoxDatabaseManager.getConnection();
 
-            listOfPesel = select(connection);
+            list = select(connection);
 
             paradoxDatabaseManager.closeConnection(connection);
         } catch (Exception e) {
-            LOGGER.error("Failed to load list of pesel", e);
+            LOGGER.error("Failed to load list of Patient", e);
         }
 
-        return listOfPesel.stream()
+        return list.stream()
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
     }
 
-    @CacheEvict(cacheNames = "pesel-list")
+    @CacheEvict(cacheNames = "patient-list")
     public void clearCache() {
-        LOGGER.info("pesel-list cache cleared");
+        LOGGER.info("patient-list cache cleared");
     }
 
-    private List<String> select(Connection connection) throws SQLException {
-        List<String> listOfPesel = new ArrayList<>();
+    private List<Patient> select(Connection connection) throws SQLException {
+        List<Patient> listOfPesel = new ArrayList<>();
         Statement statement = null;
-        String selectTableSQL = "SELECT PESEL from Bazap";
+        String selectTableSQL = "SELECT PESEL, STATUS from Bazap";
 
         try {
             statement = connection.createStatement();
@@ -66,8 +66,10 @@ public class PacjentRepository {
                 count++;
                 try {
                     String pesel = rs.getString("PESEL");
-                    listOfPesel.add(pesel);
-                    LOGGER.debug("Read <{}> pesel <{}>", count, pesel);
+                    String status = rs.getString("STATUS");
+                    PatientStatus patientStatus = PatientStatus.mapByFlag(status);
+                    listOfPesel.add(new Patient(pesel, patientStatus));
+                    LOGGER.debug("Read <{}> pesel <{}> status <{}>", count, pesel, patientStatus);
                 } catch (SQLDataException sQLDataException) {
                     //got to the end
                     break;

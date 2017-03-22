@@ -5,11 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import pl.konczak.nzoz.ewus.db.PacjentPagableRepository;
+import pl.konczak.nzoz.ewus.db.Patient;
 import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
 import pl.konczak.nzoz.ewus.domain.authentication.LoginService;
 import pl.konczak.nzoz.ewus.domain.authentication.LogoutService;
 import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
-import pl.konczak.nzoz.ewus.db.PacjentPagableRepository;
 
 @Service
 public class CheckCWUStatusFacade {
@@ -66,17 +67,19 @@ public class CheckCWUStatusFacade {
 
         final int size = 100;
         int pageNumber = 0;
-        Page<String> page = pacjentPagableRepository.findPage(pageNumber, size);
+        Page<Patient> page = pacjentPagableRepository.findPage(pageNumber, size);
         builder.withCountOfAllPesel(page.getTotalElements());
 
         while (page.hasContent()) {
             page.getContent().stream()
-                    .filter(pesel -> !pesel.isEmpty())
-                    .filter(pesel -> pesel.length() == 11)
-                    .filter(pesel -> !PESEL_NEW_CHILD.equals(pesel))
-                    .filter(pesel -> !pesel.endsWith(PESEL_INCORRECT_PREFIX))
-                    .forEach(pesel -> {
+                    .filter(patient -> !patient.getPesel().isEmpty())
+                    .filter(patient -> patient.getPesel().length() == 11)
+                    .filter(patient -> !PESEL_NEW_CHILD.equals(patient.getPesel()))
+                    .filter(patient -> !patient.getPesel().endsWith(PESEL_INCORRECT_PREFIX))
+                    .filter(patient -> !patient.isDead())
+                    .forEach(patient -> {
                         builder.incrementCountOfCheckedPesel();
+                        String pesel = patient.getPesel();
                         try {
                             CheckCWUResponse checkCWUResponse = checkCWUStatusService.checkCWU(credentials, pesel);
                             if (!CheckCWUResponseAnalyzeUtil.isUbezpieczony(checkCWUResponse)) {
@@ -84,7 +87,7 @@ public class CheckCWUStatusFacade {
                             }
                         } catch (Exception ex) {
                             builder.addFailedPesel(pesel);
-                            LOGGER.error("Failed to checkCWU for <{}> because <{}>", pesel, ex.getMessage());
+                            LOGGER.error("Failed to checkCWU for <{}> because <{}>", patient, ex.getMessage());
                         }
                     });
 

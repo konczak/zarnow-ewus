@@ -18,18 +18,18 @@ public class PacjentPagableRepository {
         this.pacjentRepository = pacjentRepository;
     }
 
-    public Page<String> findPage(int page, int size) {
-        List<String> listOfPesel = pacjentRepository.findAllPesel();
+    public Page<Patient> findPage(int page, int size) {
+        List<Patient> list = pacjentRepository.findAll();
         Pageable pageable = new PageRequest(page, size);
 
         int skip = page * size;
 
-        List<String> result = listOfPesel.stream()
+        List<Patient> result = list.stream()
                 .skip(skip)
                 .limit(size)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(result, pageable, listOfPesel.size());
+        return new PageImpl<>(result, pageable, list.size());
 
     }
 
