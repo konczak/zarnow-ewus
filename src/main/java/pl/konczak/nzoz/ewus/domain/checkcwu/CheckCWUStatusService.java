@@ -4,12 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import pl.konczak.nzoz.ewus.client.ewus.broker.BrokerClient;
 import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
 import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
 
 import javax.xml.soap.SOAPMessage;
-
-import pl.konczak.nzoz.ewus.client.ewus.broker.BrokerClient;
 
 @Service
 public class CheckCWUStatusService {
@@ -44,7 +43,7 @@ public class CheckCWUStatusService {
         checkCWUStatusResponsePersistence.persist(pesel, response);
 
         if (response.getSOAPBody().hasFault()) {
-            LOGGER.warn("Response for <{}> cotains fault", pesel);
+            LOGGER.warn("Response for <{}> contains fault", pesel);
         }
 
         CheckCWUResponse checkCWUResponse = checkCWUResponseFactory.create(response);

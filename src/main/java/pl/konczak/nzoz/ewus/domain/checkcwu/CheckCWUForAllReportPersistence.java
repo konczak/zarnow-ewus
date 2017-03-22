@@ -40,7 +40,7 @@ public class CheckCWUForAllReportPersistence {
         content.add("liczba wykrytych peseli bez ubezpieczenia: " + checkCWUForAllReport.getCountOfPeseleBezUbezpieczenia());
         if (checkCWUForAllReport.getCountOfFailedPesels() > 0) {
             content.add("===== ***** ===== ***** =====");
-            content.add("list peseli dla których wystąpił błąd:");
+            content.add("lista peseli dla których wystąpił błąd:");
             checkCWUForAllReport.getFailedPesels().stream()
                     .sorted()
                     .forEach(content::add);
@@ -48,7 +48,7 @@ public class CheckCWUForAllReportPersistence {
 
         if (checkCWUForAllReport.getCountOfPeseleBezUbezpieczenia() > 0) {
             content.add("===== ***** ===== ***** =====");
-            content.add("list peseli bez ubezpieczenia:");
+            content.add("lista peseli bez ubezpieczenia:");
             checkCWUForAllReport.getPeseleBezUbezpieczenia().stream()
                     .sorted()
                     .forEach(content::add);
