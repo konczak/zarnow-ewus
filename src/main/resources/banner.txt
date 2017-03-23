@@ -6,4 +6,4 @@
  /________/__/     \__\ | _| `._____||__| \__|  \______/      \__/  \__/          |_______|   \__/  \__/      \______/  |_______/    
                                                                                                                                      
  :: Spring Boot ::   v${spring-boot.version}
- :: Zarnow-eWUS ::   v@project.version@
+ :: Zarnow-eWUS ::   v${application.version}
