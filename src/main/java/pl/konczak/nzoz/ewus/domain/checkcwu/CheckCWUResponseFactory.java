@@ -32,11 +32,11 @@ public class CheckCWUResponseFactory {
     public static String messageToString(SOAPMessage soap) throws SOAPException, IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         soap.writeTo(stream);
-        return new String(stream.toByteArray());
+        return new String(stream.toByteArray(), "UTF-8");
     }
 
     public static SOAPMessage stringToMessage(String soap) throws IOException, SOAPException {
-        InputStream inputStream = new ByteArrayInputStream(soap.getBytes());
+        InputStream inputStream = new ByteArrayInputStream(soap.getBytes("UTF-8"));
         return MessageFactory.newInstance().createMessage(null, inputStream);
     }
 
