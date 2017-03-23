@@ -46,6 +46,9 @@ public class ParadoxDatabaseManager {
     }
 
     public void closeConnection(Connection connection) {
+        if (connection == null) {
+            return;
+        }
         try {
             connection.close();
         } catch (SQLException ex) {

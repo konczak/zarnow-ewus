@@ -83,4 +83,18 @@ public class PacjentRepository {
         }
         return listOfPesel;
     }
+
+    public void testAccess() throws Exception {
+        Connection connection = null;
+        try {
+            connection = paradoxDatabaseManager.getConnection();
+
+            select(connection);
+        } catch (Exception e) {
+            LOGGER.error("Failed to load list of Patient", e);
+            throw e;
+        } finally {
+            paradoxDatabaseManager.closeConnection(connection);
+        }
+    }
 }
