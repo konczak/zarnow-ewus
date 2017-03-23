@@ -87,7 +87,7 @@ public class CheckCWUStatusFacade {
                             }
                         } catch (Exception ex) {
                             builder.addFailedPesel(pesel);
-                            LOGGER.error("Failed to checkCWU for <{}> because <{}>", patient, ex.getMessage());
+                            LOGGER.error("Failed to checkCWU for <{}> because <{}>", patient.getPesel(), ex.getMessage());
                         }
                     });
 
