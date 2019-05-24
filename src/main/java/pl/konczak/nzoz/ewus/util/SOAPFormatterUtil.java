@@ -1,8 +1,8 @@
 package pl.konczak.nzoz.ewus.util;
 
-import java.io.ByteArrayOutputStream;
-
-import org.apache.log4j.Logger;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.xml.soap.SOAPMessage;
 import javax.xml.transform.OutputKeys;
@@ -10,10 +10,11 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
+import java.io.ByteArrayOutputStream;
 
+@Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SOAPFormatterUtil {
-
-    private static final Logger LOGGER = Logger.getLogger(SOAPFormatterUtil.class);
 
     public static String format(SOAPMessage soapMessage) {
         try {
@@ -33,7 +34,7 @@ public final class SOAPFormatterUtil {
 
             return streamOut.toString();
         } catch (Exception e) {
-            LOGGER.error("Failed to format SOAPMessage", e);
+            log.error("Failed to format SOAPMessage", e);
             return null;
         }
     }

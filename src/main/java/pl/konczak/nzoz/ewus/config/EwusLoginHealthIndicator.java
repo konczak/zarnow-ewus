@@ -1,29 +1,25 @@
 package pl.konczak.nzoz.ewus.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
-
 import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
 import pl.konczak.nzoz.ewus.domain.authentication.LoginService;
 
+@Slf4j
 @Component
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class EwusLoginHealthIndicator
         implements HealthIndicator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EwusLoginHealthIndicator.class);
-
     private final LoginService loginService;
-
-    public EwusLoginHealthIndicator(LoginService loginService) {
-        this.loginService = loginService;
-    }
 
     @Override
     public Health health() {
-        LOGGER.info("EwusLoginHealthIndicator starts");
+        log.info("EwusLoginHealthIndicator starts");
 
         Credentials credentials;
         try {

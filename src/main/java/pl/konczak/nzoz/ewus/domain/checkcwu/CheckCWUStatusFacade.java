@@ -1,10 +1,10 @@
 package pl.konczak.nzoz.ewus.domain.checkcwu;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
 import pl.konczak.nzoz.ewus.db.PacjentPagableRepository;
 import pl.konczak.nzoz.ewus.db.Patient;
 import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
@@ -12,10 +12,10 @@ import pl.konczak.nzoz.ewus.domain.authentication.LoginService;
 import pl.konczak.nzoz.ewus.domain.authentication.LogoutService;
 import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
 
+@Slf4j
 @Service
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class CheckCWUStatusFacade {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckCWUStatusFacade.class);
 
     private static final String PESEL_NEW_CHILD = "00000000000";
 
@@ -31,20 +31,8 @@ public class CheckCWUStatusFacade {
 
     private final CheckCWUForAllReportPersistence checkCWUForAllReportPersistence;
 
-    public CheckCWUStatusFacade(LoginService loginService,
-            CheckCWUStatusService checkCWUStatusService,
-            LogoutService logoutService,
-            PacjentPagableRepository pacjentPagableRepository,
-            CheckCWUForAllReportPersistence checkCWUForAllReportPersistence) {
-        this.loginService = loginService;
-        this.checkCWUStatusService = checkCWUStatusService;
-        this.logoutService = logoutService;
-        this.pacjentPagableRepository = pacjentPagableRepository;
-        this.checkCWUForAllReportPersistence = checkCWUForAllReportPersistence;
-    }
-
     public CheckCWUResponse checkCWU(String pesel) throws Exception {
-        LOGGER.debug("start checkCWU proces");
+        log.debug("start checkCWU proces");
 
         Credentials credentials = loginService.login();
 
@@ -52,13 +40,13 @@ public class CheckCWUStatusFacade {
 
         logoutService.logout(credentials);
 
-        LOGGER.debug("checkCWU proces completed");
+        log.debug("checkCWU proces completed");
 
         return checkCWUResponse;
     }
 
     public void checkCWUForAll() throws Exception {
-        LOGGER.debug("start checkCWU all proces");
+        log.debug("start checkCWU all proces");
 
         CheckCWUForAllReport.CheckCWUForAllReportBuilder builder = CheckCWUForAllReport.builder();
         builder.registerStart();
@@ -87,12 +75,12 @@ public class CheckCWUStatusFacade {
                             }
                         } catch (Exception ex) {
                             builder.addFailedPesel(pesel);
-                            LOGGER.error("Failed to checkCWU for <{}> because <{}>", patient.getPesel(), ex.getMessage());
+                            log.error("Failed to checkCWU for <{}> because <{}>", patient.getPesel(), ex.getMessage());
                         }
                     });
 
             page = pacjentPagableRepository.findPage(++pageNumber, size);
-            LOGGER.debug("page <{}> processed", pageNumber);
+            log.debug("page <{}> processed", pageNumber);
         }
 
         pacjentPagableRepository.forceDatabaseStateRefresh();
@@ -105,12 +93,12 @@ public class CheckCWUStatusFacade {
 
         checkCWUForAllReportPersistence.persist(checkCWUForAllReport);
 
-        LOGGER.info("finished checkCWU for <{} of {}> found pesel numbers and <{}> has failed, process took <{}>s",
+        log.info("finished checkCWU for <{} of {}> found pesel numbers and <{}> has failed, process took <{}>s",
                 checkCWUForAllReport.getCountOfCheckedPesel(),
                 checkCWUForAllReport.getCountOfAllPesel(),
                 checkCWUForAllReport.getCountOfFailedPesels(),
                 checkCWUForAllReport.getProcessTimeInSeconds());
 
-        LOGGER.debug("checkCWU all proces completed");
+        log.debug("checkCWU all proces completed");
     }
 }

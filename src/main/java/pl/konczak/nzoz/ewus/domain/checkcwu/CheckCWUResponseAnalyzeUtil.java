@@ -1,12 +1,11 @@
 package pl.konczak.nzoz.ewus.domain.checkcwu;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CheckCWUResponseAnalyzeUtil {
-
-    private CheckCWUResponseAnalyzeUtil() {
-
-    }
 
     public static boolean isUbezpieczony(CheckCWUResponse checkCWUResponse) {
         if (checkCWUResponse == null) {

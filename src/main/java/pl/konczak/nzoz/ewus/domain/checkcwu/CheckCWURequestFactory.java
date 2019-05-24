@@ -1,38 +1,26 @@
 package pl.konczak.nzoz.ewus.domain.checkcwu;
 
-import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+import pl.konczak.nzoz.ewus.client.ewus.namespace.BrokerNamespaceUtil;
 import pl.konczak.nzoz.ewus.client.ewus.namespace.CommonNamespaceUtil;
 import pl.konczak.nzoz.ewus.client.ewus.namespace.EwusNamespaceUtil;
-import pl.konczak.nzoz.ewus.client.ewus.namespace.BrokerNamespaceUtil;
+import pl.konczak.nzoz.ewus.config.EwusClientConfiguration;
+import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
+import javax.xml.soap.*;
 import java.time.ZonedDateTime;
 import java.util.GregorianCalendar;
 
-import org.springframework.stereotype.Component;
-
-import pl.konczak.nzoz.ewus.config.EwusClientConfiguration;
-
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPBodyElement;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
-
 @Component
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class CheckCWURequestFactory {
 
     private final EwusClientConfiguration ewusClientConfiguration;
-
-    public CheckCWURequestFactory(EwusClientConfiguration ewusClientConfiguration) {
-        this.ewusClientConfiguration = ewusClientConfiguration;
-    }
 
     SOAPMessage create(Credentials credentials, String pesel) throws Exception {
         MessageFactory factory = MessageFactory.newInstance();

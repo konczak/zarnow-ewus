@@ -1,17 +1,17 @@
 package pl.konczak.nzoz.ewus.domain.checkcwu;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
 import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
 
 import javax.xml.soap.SOAPMessage;
 
+@Slf4j
 @Component
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class CheckCWUStatusResponsePersistenceSuffixFactory {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckCWUStatusResponsePersistenceSuffixFactory.class);
 
     private static final String FAIL = "FAIL";
 
@@ -21,16 +21,12 @@ public class CheckCWUStatusResponsePersistenceSuffixFactory {
 
     private final CheckCWUResponseFactory checkCWUResponseFactory;
 
-    public CheckCWUStatusResponsePersistenceSuffixFactory(CheckCWUResponseFactory checkCWUResponseFactory) {
-        this.checkCWUResponseFactory = checkCWUResponseFactory;
-    }
-
     public String create(SOAPMessage sOAPMessage) {
         String suffix;
         try {
             suffix = createUnsafe(sOAPMessage);
         } catch (Exception exception) {
-            LOGGER.error("Failed to create suffix for CheckCWUStatusResponse", exception);
+            log.error("Failed to create suffix for CheckCWUStatusResponse", exception);
             suffix = FAIL;
         }
         return suffix;

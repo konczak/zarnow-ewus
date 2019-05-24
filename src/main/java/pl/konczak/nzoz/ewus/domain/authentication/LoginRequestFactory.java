@@ -1,27 +1,18 @@
 package pl.konczak.nzoz.ewus.domain.authentication;
 
-import pl.konczak.nzoz.ewus.client.ewus.namespace.AuthNamespaceUtil;
-
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-
+import pl.konczak.nzoz.ewus.client.ewus.namespace.AuthNamespaceUtil;
 import pl.konczak.nzoz.ewus.config.EwusCredentialsConfiguration;
 
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPBodyElement;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
+import javax.xml.soap.*;
 
 @Component
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class LoginRequestFactory {
 
     private final EwusCredentialsConfiguration ewusCredentialsConfiguration;
-
-    public LoginRequestFactory(EwusCredentialsConfiguration ewusCredentialsConfiguration) {
-        this.ewusCredentialsConfiguration = ewusCredentialsConfiguration;
-    }
 
     public SOAPMessage create() throws Exception {
         MessageFactory factory = MessageFactory.newInstance();

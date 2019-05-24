@@ -1,31 +1,27 @@
 package pl.konczak.nzoz.ewus.db;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import pl.konczak.nzoz.ewus.config.DatabaseConfiguration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import pl.konczak.nzoz.ewus.config.DatabaseConfiguration;
-
+@Slf4j
 @Component
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class ParadoxDatabaseManager {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParadoxDatabaseManager.class);
-
     private final DatabaseConfiguration databaseConfiguration;
-
-    public ParadoxDatabaseManager(DatabaseConfiguration databaseConfiguration) {
-        this.databaseConfiguration = databaseConfiguration;
-    }
 
     public Connection getConnection() throws Exception {
         try {
             Class.forName(databaseConfiguration.getDriver());
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Where is your Paradox JDBC Driver?", e);
+            log.error("Where is your Paradox JDBC Driver?", e);
             throw e;
         }
 
@@ -35,7 +31,7 @@ public class ParadoxDatabaseManager {
             connection = DriverManager.getConnection(databaseConfiguration.getUrl());
 
         } catch (SQLException e) {
-            LOGGER.error("Connection Failed! Check output console", e);
+            log.error("Connection Failed! Check output console", e);
             throw e;
         }
 
@@ -52,7 +48,7 @@ public class ParadoxDatabaseManager {
         try {
             connection.close();
         } catch (SQLException ex) {
-            LOGGER.error("Failed to close connection", ex);
+            log.error("Failed to close connection", ex);
         }
     }
 }

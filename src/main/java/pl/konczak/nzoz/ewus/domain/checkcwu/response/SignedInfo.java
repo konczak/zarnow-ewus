@@ -1,9 +1,14 @@
 package pl.konczak.nzoz.ewus.domain.checkcwu.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+@Getter
+@Setter
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SignedInfo {
 
@@ -15,29 +20,5 @@ public class SignedInfo {
 
     @XmlElement(name = "Reference")
     private Reference reference;
-
-    public CanonicalizationMethod getCanonicalizationMethod() {
-        return canonicalizationMethod;
-    }
-
-    public void setCanonicalizationMethod(CanonicalizationMethod canonicalizationMethod) {
-        this.canonicalizationMethod = canonicalizationMethod;
-    }
-
-    public SignatureMethod getSignatureMethod() {
-        return signatureMethod;
-    }
-
-    public void setSignatureMethod(SignatureMethod signatureMethod) {
-        this.signatureMethod = signatureMethod;
-    }
-
-    public Reference getReference() {
-        return reference;
-    }
-
-    public void setReference(Reference reference) {
-        this.reference = reference;
-    }
 
 }

@@ -1,30 +1,23 @@
 package pl.konczak.nzoz.ewus.db;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Slf4j
 @Repository
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class PacjentRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PacjentRepository.class);
-
     private final ParadoxDatabaseManager paradoxDatabaseManager;
-
-    public PacjentRepository(ParadoxDatabaseManager paradoxDatabaseManager) {
-        this.paradoxDatabaseManager = paradoxDatabaseManager;
-    }
 
     @Cacheable(value = "patient-list")
     public List<Patient> findAll() {
@@ -36,7 +29,7 @@ public class PacjentRepository {
 
             paradoxDatabaseManager.closeConnection(connection);
         } catch (Exception e) {
-            LOGGER.error("Failed to load list of Patient", e);
+            log.error("Failed to load list of Patient", e);
         }
 
         return list.stream()
@@ -47,7 +40,7 @@ public class PacjentRepository {
 
     @CacheEvict(cacheNames = "patient-list")
     public void clearCache() {
-        LOGGER.info("patient-list cache cleared");
+        log.info("patient-list cache cleared");
     }
 
     private List<Patient> select(Connection connection) throws SQLException {
@@ -69,7 +62,7 @@ public class PacjentRepository {
                     String status = rs.getString("STATUS");
                     PatientStatus patientStatus = PatientStatus.mapByFlag(status);
                     listOfPesel.add(new Patient(pesel, patientStatus));
-                    LOGGER.debug("Read <{}> pesel <{}> status <{}>", count, pesel, patientStatus);
+                    log.debug("Read <{}> pesel <{}> status <{}>", count, pesel, patientStatus);
                 } catch (SQLDataException sQLDataException) {
                     //got to the end
                     break;
@@ -91,7 +84,7 @@ public class PacjentRepository {
 
             select(connection);
         } catch (Exception e) {
-            LOGGER.error("Failed to load list of Patient", e);
+            log.error("Failed to load list of Patient", e);
             throw e;
         } finally {
             paradoxDatabaseManager.closeConnection(connection);

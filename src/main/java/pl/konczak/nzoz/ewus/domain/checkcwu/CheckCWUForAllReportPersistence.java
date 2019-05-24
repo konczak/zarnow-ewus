@@ -1,5 +1,11 @@
 package pl.konczak.nzoz.ewus.domain.checkcwu;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import pl.konczak.nzoz.ewus.config.EwusPersistenceConfiguration;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,25 +14,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import pl.konczak.nzoz.ewus.config.EwusPersistenceConfiguration;
-
+@Slf4j
 @Component
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class CheckCWUForAllReportPersistence {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CheckCWUForAllReportPersistence.class);
-    
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+
     private final EwusPersistenceConfiguration ewusPersistenceConfiguration;
-
-    private final DateTimeFormatter dateTimeFormatter;
-
-    public CheckCWUForAllReportPersistence(EwusPersistenceConfiguration ewusPersistenceConfiguration) {
-        this.ewusPersistenceConfiguration = ewusPersistenceConfiguration;
-        this.dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
-    }
 
     void persist(CheckCWUForAllReport checkCWUForAllReport) throws IOException {
         final String pathToFile = createPathToFile();
@@ -55,14 +50,14 @@ public class CheckCWUForAllReportPersistence {
         }
 
         Files.write(Paths.get(pathToFile), content);
-        
-        
-        LOGGER.info("CheckCWUForAllReport save to file <{}>", pathToFile);
+
+
+        log.info("CheckCWUForAllReport save to file <{}>", pathToFile);
     }
 
     private String createPathToFile() {
         LocalDateTime now = LocalDateTime.now();
-        String fulldate = now.format(dateTimeFormatter);
+        String fulldate = now.format(DATE_TIME_FORMATTER);
 
         return ewusPersistenceConfiguration.getFolder() + fulldate + "_CheckCWUForAllReport.txt";
     }

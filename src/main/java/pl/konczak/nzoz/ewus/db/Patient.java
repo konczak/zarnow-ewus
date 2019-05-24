@@ -1,26 +1,18 @@
 package pl.konczak.nzoz.ewus.db;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
+@AllArgsConstructor
 public class Patient
         implements Comparable<Patient> {
 
     private final String pesel;
 
     private final PatientStatus patientStatus;
-
-    public Patient(String pesel, PatientStatus patientStatus) {
-        this.pesel = pesel;
-        this.patientStatus = patientStatus;
-    }
-
-    public String getPesel() {
-        return pesel;
-    }
-
-    public PatientStatus getPatientStatus() {
-        return patientStatus;
-    }
 
     public boolean isDead() {
         return PatientStatus.DEAD == patientStatus;

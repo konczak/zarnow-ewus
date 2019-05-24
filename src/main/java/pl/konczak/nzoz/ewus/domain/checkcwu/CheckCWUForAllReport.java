@@ -1,9 +1,15 @@
 package pl.konczak.nzoz.ewus.domain.checkcwu;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CheckCWUForAllReport {
 
     private final long countOfCheckedPesel;
@@ -15,30 +21,6 @@ public class CheckCWUForAllReport {
     private final Set<String> failedPesels;
 
     private final Set<String> peseleBezUbezpieczenia;
-
-    private CheckCWUForAllReport(long countOfCheckedPesel,
-            long countOfAllPesel,
-            long processTimeInSeconds,
-            Set<String> failedPesels,
-            Set<String> peseleBezUbezpieczenia) {
-        this.countOfCheckedPesel = countOfCheckedPesel;
-        this.countOfAllPesel = countOfAllPesel;
-        this.processTimeInSeconds = processTimeInSeconds;
-        this.failedPesels = failedPesels;
-        this.peseleBezUbezpieczenia = peseleBezUbezpieczenia;
-    }
-
-    public long getCountOfCheckedPesel() {
-        return countOfCheckedPesel;
-    }
-
-    public long getCountOfAllPesel() {
-        return countOfAllPesel;
-    }
-
-    public long getProcessTimeInSeconds() {
-        return processTimeInSeconds;
-    }
 
     public Set<String> getFailedPesels() {
         return Collections.unmodifiableSet(failedPesels);

@@ -1,5 +1,11 @@
 package pl.konczak.nzoz.ewus.web.restapi.ewus;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum PersonSearchStatus {
 
     PERSON_WITH_PESEL_DOES_NOT_EXISTS(0),
@@ -7,14 +13,6 @@ public enum PersonSearchStatus {
     PERSON_EXISTS_BUT_PESEL_IS_CANCELED(-1);
 
     private final int status;
-
-    private PersonSearchStatus(int status) {
-        this.status = status;
-    }
-
-    public int getStatus() {
-        return status;
-    }
 
     public static PersonSearchStatus convert(int status) {
         for (PersonSearchStatus searchStatus : PersonSearchStatus.values()) {

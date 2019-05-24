@@ -1,28 +1,24 @@
 package pl.konczak.nzoz.ewus.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
-
 import pl.konczak.nzoz.ewus.db.PacjentRepository;
 
+@Slf4j
 @Component
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class BazapHealthIndicator
         implements HealthIndicator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BazapHealthIndicator.class);
-
     private final PacjentRepository pacjentRepository;
-
-    public BazapHealthIndicator(PacjentRepository pacjentRepository) {
-        this.pacjentRepository = pacjentRepository;
-    }
 
     @Override
     public Health health() {
-        LOGGER.info("BazapHealthIndicator starts");
+        log.info("BazapHealthIndicator starts");
 
         try {
             pacjentRepository.testAccess();

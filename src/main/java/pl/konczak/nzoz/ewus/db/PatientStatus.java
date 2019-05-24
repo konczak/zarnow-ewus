@@ -1,5 +1,11 @@
 package pl.konczak.nzoz.ewus.db;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum PatientStatus {
 
     DEAD("Z"),
@@ -9,14 +15,6 @@ public enum PatientStatus {
     UNKNOWN("-");
 
     private final String flag;
-
-    private PatientStatus(String flag) {
-        this.flag = flag;
-    }
-
-    public String getFlag() {
-        return flag;
-    }
 
     public static PatientStatus mapByFlag(String flag) {
         for (PatientStatus patientStatus : PatientStatus.values()) {

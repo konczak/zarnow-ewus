@@ -1,11 +1,15 @@
 package pl.konczak.nzoz.ewus.domain.checkcwu.response;
 
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import java.util.List;
 
+@Getter
+@Setter
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Reference {
 
@@ -17,29 +21,5 @@ public class Reference {
 
     @XmlElement(name = "DigestValue")
     private String digestValue;
-
-    public List<Transform> getTransforms() {
-        return transforms;
-    }
-
-    public void setTransforms(List<Transform> transforms) {
-        this.transforms = transforms;
-    }
-
-    public DigestMethod getDigestMethod() {
-        return digestMethod;
-    }
-
-    public void setDigestMethod(DigestMethod digestMethod) {
-        this.digestMethod = digestMethod;
-    }
-
-    public String getDigestValue() {
-        return digestValue;
-    }
-
-    public void setDigestValue(String digestValue) {
-        this.digestValue = digestValue;
-    }
 
 }

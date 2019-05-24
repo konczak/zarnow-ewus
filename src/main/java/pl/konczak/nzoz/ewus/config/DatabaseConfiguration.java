@@ -1,15 +1,13 @@
 package pl.konczak.nzoz.ewus.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @ConfigurationProperties(prefix = "database")
 public class DatabaseConfiguration {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseConfiguration.class);
 
     private String driver;
 
@@ -33,7 +31,7 @@ public class DatabaseConfiguration {
                 && url.endsWith("/")) {
             //remove last character which is "/"
             this.url = url.substring(0, url.length() - 1);
-            LOGGER.info("Trimmed last character of database URL");
+            log.info("Trimmed last character of database URL");
         } else {
             this.url = url;
         }

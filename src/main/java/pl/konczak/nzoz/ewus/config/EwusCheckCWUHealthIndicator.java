@@ -1,34 +1,31 @@
 package pl.konczak.nzoz.ewus.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
-
 import pl.konczak.nzoz.ewus.domain.checkcwu.CheckCWUStatusFacade;
 import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
 
+@Slf4j
 @Component
 public class EwusCheckCWUHealthIndicator
         implements HealthIndicator {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EwusCheckCWUHealthIndicator.class);
 
     private final CheckCWUStatusFacade checkCWUStatusFacade;
 
     private final String pesel;
 
-    public EwusCheckCWUHealthIndicator(CheckCWUStatusFacade checkCWUStatusFacade,
-            @Value("${health.ewus.checkcwu.pesel}") String pesel) {
+    EwusCheckCWUHealthIndicator(CheckCWUStatusFacade checkCWUStatusFacade,
+                                @Value("${health.ewus.checkcwu.pesel}") String pesel) {
         this.checkCWUStatusFacade = checkCWUStatusFacade;
         this.pesel = pesel;
     }
 
     @Override
     public Health health() {
-        LOGGER.info("EwusCheckCWUHealthIndicator starts");
+        log.info("EwusCheckCWUHealthIndicator starts");
 
         CheckCWUResponse checkCWUResponse;
         try {

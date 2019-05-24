@@ -1,7 +1,9 @@
 package pl.konczak.nzoz.ewus.web.restapi.ewus;
 
+import lombok.Getter;
 import pl.konczak.nzoz.ewus.domain.authentication.Credentials;
 
+@Getter
 public class LoginResponse {
 
     private final String session;
@@ -14,18 +16,6 @@ public class LoginResponse {
         this.session = credentials.getSession();
         this.authToken = credentials.getAuthToken();
         this.response = credentials.getResponse();
-    }
-
-    public String getSession() {
-        return session;
-    }
-
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public String getResponse() {
-        return response;
     }
 
 }
