@@ -1,5 +1,7 @@
 package pl.konczak.nzoz.ewus.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -11,6 +13,8 @@ import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
 @Component
 public class EwusCheckCWUHealthIndicator
         implements HealthIndicator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EwusCheckCWUHealthIndicator.class);
 
     private final CheckCWUStatusFacade checkCWUStatusFacade;
 
@@ -24,6 +28,8 @@ public class EwusCheckCWUHealthIndicator
 
     @Override
     public Health health() {
+        LOGGER.info("EwusCheckCWUHealthIndicator starts");
+
         CheckCWUResponse checkCWUResponse;
         try {
             checkCWUResponse = checkCWUStatusFacade.checkCWU(pesel);
