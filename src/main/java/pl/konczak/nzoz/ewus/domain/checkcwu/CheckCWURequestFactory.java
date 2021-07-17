@@ -72,7 +72,7 @@ public class CheckCWURequestFactory {
         SOAPElement localname = location.addChildElement(CommonNamespaceUtil._Localname_QNAME);
         localname.addTextNode("checkCWU");
         SOAPElement version = location.addChildElement(CommonNamespaceUtil._Version_QNAME);
-        version.addTextNode("3.0");
+        version.addTextNode("5.0");
 
         return location;
     }
@@ -90,7 +90,7 @@ public class CheckCWURequestFactory {
 
     private void addStatusCWUpyt(SOAPElement textload, String pesel) throws SOAPException {
         SOAPElement statusCWUpyt = textload.addChildElement(EwusNamespaceUtil._Status_cwu_pyt_QNAME);
-        statusCWUpyt.addNamespaceDeclaration("ewus", "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3");
+        statusCWUpyt.addNamespaceDeclaration("ewus", "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5");
         SOAPElement numerPesel = statusCWUpyt.addChildElement(EwusNamespaceUtil._Numer_pesel_QNAME);
         numerPesel.addTextNode(pesel);
         SOAPElement systemSwiad = statusCWUpyt.addChildElement(EwusNamespaceUtil._System_swiad_QNAME);

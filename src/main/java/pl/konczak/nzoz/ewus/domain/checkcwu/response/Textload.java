@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class Textload {
 
     @XmlElement(name = "status_cwu_odp",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private StatusCwuOdp statusCwuOdp;
 
 }

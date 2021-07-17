@@ -20,23 +20,23 @@ public class StatusCwuOdp {
     private String dataCzasOperacji;
 
     @XmlElement(name = "status_cwu",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private int statusCwu;
 
     @XmlElement(name = "numer_pesel",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private String pesel;
 
     @XmlElement(name = "system_nfz",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private SystemNfz systemNfz;
 
     @XmlElement(name = "swiad",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private Swiad swiad;
 
     @XmlElement(name = "pacjent",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private Pacjent pacjent;
 
     @XmlElement(name = "signature",

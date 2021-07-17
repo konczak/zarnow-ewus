@@ -13,19 +13,19 @@ import javax.xml.bind.annotation.XmlElement;
 public class Pacjent {
 
     @XmlElement(name = "data_waznosci_potwierdzenia",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private String dataWaznosciPotwierdzenia;
 
     @XmlElement(name = "status_ubezp",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private StatusUbezp statusUbezp;
 
     @XmlElement(name = "imie",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private String imie;
 
     @XmlElement(name = "nazwisko",
-            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v3")
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private String nazwisko;
 
 }
