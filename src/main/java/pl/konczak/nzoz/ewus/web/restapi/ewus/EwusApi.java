@@ -63,4 +63,13 @@ public class EwusApi {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/check/listed",
+            method = RequestMethod.GET)
+    public HttpEntity<Void> checkListed() throws Exception {
+        log.info("/ewus/check/listed");
+        checkCWUStatusFacade.checkCWUForListed();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

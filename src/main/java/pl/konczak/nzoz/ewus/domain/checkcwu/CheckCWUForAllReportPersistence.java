@@ -23,11 +23,11 @@ public class CheckCWUForAllReportPersistence {
 
     private final EwusPersistenceConfiguration ewusPersistenceConfiguration;
 
-    void persist(CheckCWUForAllReport checkCWUForAllReport) throws IOException {
-        final String pathToFile = createPathToFile();
+    void persist(CheckCWUForManyPeselsReport checkCWUForAllReport) throws IOException {
+        final String pathToFile = createPathToFile(checkCWUForAllReport);
         List<String> content = new ArrayList<>();
 
-        content.add("CheckCWUForAllReport");
+        content.add(checkCWUForAllReport.getName());
         content.add("proces trwał: " + checkCWUForAllReport.getProcessTimeInSeconds() + "s");
         content.add("liczba odnalezionych peseli: " + checkCWUForAllReport.getCountOfAllPesel());
         content.add("liczba sprawdzonych peseli: " + checkCWUForAllReport.getCountOfCheckedPesel());
@@ -55,10 +55,10 @@ public class CheckCWUForAllReportPersistence {
         log.info("CheckCWUForAllReport save to file <{}>", pathToFile);
     }
 
-    private String createPathToFile() {
+    private String createPathToFile(CheckCWUForManyPeselsReport checkCWUForAllReport) {
         LocalDateTime now = LocalDateTime.now();
         String fulldate = now.format(DATE_TIME_FORMATTER);
 
-        return ewusPersistenceConfiguration.getFolder() + fulldate + "_CheckCWUForAllReport.txt";
+        return ewusPersistenceConfiguration.getFolder() + fulldate + "_" + checkCWUForAllReport.getName() + ".txt";
     }
 }
