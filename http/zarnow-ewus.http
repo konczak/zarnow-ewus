@@ -1,0 +1,18 @@
+# BUSINESS
+
+### login
+GET {{zarnow-ewus-address}}/ewus/login
+
+### check pesel
+GET {{zarnow-ewus-address}}/ewus/check?pesel=12345678901
+
+### check all pesels from db
+GET {{zarnow-ewus-address}}/ewus/check/all
+
+# MAINTENANCE
+
+### test loading patiens from db
+GET {{zarnow-ewus-address}}/test/load/pesel?page=0&size=25
+
+### health
+GET {{zarnow-ewus-address}}/health
