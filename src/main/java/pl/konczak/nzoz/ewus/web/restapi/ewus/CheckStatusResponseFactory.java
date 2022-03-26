@@ -1,8 +1,11 @@
 package pl.konczak.nzoz.ewus.web.restapi.ewus;
 
 import org.springframework.stereotype.Component;
-
 import pl.konczak.nzoz.ewus.domain.checkcwu.response.CheckCWUResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CheckStatusResponseFactory {
@@ -15,7 +18,8 @@ public class CheckStatusResponseFactory {
         String nazwisko = readNazwisko(checkCWUResponse);
         String oznaczenieRecept = readOznaczenieRecept(checkCWUResponse);
         int statusUbezpieczenia = readStatusUbezpieczenia(checkCWUResponse);
-        return new CheckStatusResponse(personSearchStatus, pesel, imie, nazwisko, statusUbezpieczenia == 1, oznaczenieRecept);
+        List<AdditionalInfo> informacjeDodatkowe = readInformacjeDodatkowe(checkCWUResponse);
+        return new CheckStatusResponse(personSearchStatus, pesel, imie, nazwisko, statusUbezpieczenia == 1, oznaczenieRecept, informacjeDodatkowe);
     }
 
     private int readSatus(CheckCWUResponse checkCWUResponse) {
@@ -52,5 +56,16 @@ public class CheckStatusResponseFactory {
             return 0;
         }
         return checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getStatusUbezp().getStatus();
+    }
+
+    private List<AdditionalInfo> readInformacjeDodatkowe(CheckCWUResponse checkCWUResponse) {
+        if (checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent() == null
+                || checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getInformacjeDodatkowe() == null) {
+            return new ArrayList<>();
+        }
+        return checkCWUResponse.getPayload().getTextload().getStatusCwuOdp().getPacjent().getInformacjeDodatkowe()
+                .stream()
+                .map(informacjaDodatkowa -> new AdditionalInfo(informacjaDodatkowa.getKod(), informacjaDodatkowa.getPoziom(), informacjaDodatkowa.getWartosc()))
+                .collect(Collectors.toList());
     }
 }

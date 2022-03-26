@@ -6,6 +6,8 @@ import lombok.Setter;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,5 +29,14 @@ public class Pacjent {
     @XmlElement(name = "nazwisko",
             namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
     private String nazwisko;
+
+    @XmlElement(
+            name = "informacja",
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5",
+            type = InformacjaDodatkowa.class
+    )
+    @XmlElementWrapper(name = "informacje_dodatkowe",
+            namespace = "https://ewus.nfz.gov.pl/ws/broker/ewus/status_cwu/v5")
+    private List<InformacjaDodatkowa> informacjeDodatkowe;
 
 }
