@@ -1,43 +1,57 @@
 # Żarnów eWUŚ #
 
 ### 1. Java 8 ### {#requirements-java}
- - **UWAGA** Java ma brzydki zwyczaj że wersja 8 = 1.8 (analogicznie dla wersji 6 oraz 7)
- - sprawdź czy Java 8 jest zainstalowana.
- - otwórz menu Start,
- - wybierz pozycję uruchom i wpisz **_cmd_** lub wpisz **_cmd_** w okno wyszukiwania,
- - następnie w linii komend wprowadź:
+
+- **UWAGA** Java ma brzydki zwyczaj że wersja 8 = 1.8 (analogicznie dla wersji 6 oraz 7)
+- sprawdź czy Java 8 jest zainstalowana.
+- otwórz menu Start,
+- wybierz pozycję uruchom i wpisz **_cmd_** lub wpisz **_cmd_** w okno wyszukiwania,
+- następnie w linii komend wprowadź:
 
 ```
 java -version
 ```
-  
- - jeżeli pojawił się komunikat:
+
+- jeżeli pojawił się komunikat:
+
 ```
 java version "1.8***"
 ```
+
 to znaczy że Java w wymaganej wersji jest już zainstalowana i można przejść do [następnego punktu](#requirements-app-placement).
- - jeżeli pojawił się komunikat że polecenia nie odnaleziono lub numer wersji jest mniejszy niż 1.8, konieczne będzie pobranie oraz zainstalowanie Java Runtime Edition (JRE) w wersji 8. Należy ją pobrać [tutaj](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) - sugeruję wybór wersji offline dzięki temu cały plik instalacyjny zostanie pobrany na dysk lokalny. Należy jeszcze dobrać wersję do systemu operacyjnego - Windows x86 dla 32-bitowego lub Windows x64 dla 64-bitowego.
- - podczas instalacji postępuj zgodnie z instrukcjami.
- - po zakończeniu instalacji wymagany jest restart linii komend.
+
+- jeżeli pojawił się komunikat że polecenia nie odnaleziono lub numer wersji jest mniejszy niż 1.8, konieczne będzie pobranie oraz zainstalowanie Java Runtime
+  Edition (JRE) w wersji 8. Należy ją pobrać [tutaj](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html) - sugeruję wybór
+  wersji offline dzięki temu cały plik instalacyjny zostanie pobrany na dysk lokalny. Należy jeszcze dobrać wersję do systemu operacyjnego - Windows x86 dla
+  32-bitowego lub Windows x64 dla 64-bitowego.
+- podczas instalacji postępuj zgodnie z instrukcjami.
+- po zakończeniu instalacji wymagany jest restart linii komend.
 
 ### 2. Dostarczone pliki i lokalizacja aplikacji ### {#requirements-app-placement}
+
 Dostarczone pliki i foldery:
- 
- - **_logs/_**
- - **_results/_** 
- - **_application.properties_**
- - **_instrukcja.html_**
- - **_logback.xml_**
- - **_zarnow-ewus-1.0.0.jar_**
+
+- **_logs/_**
+- **_results/_**
+- **_application.properties_**
+- **_instrukcja.html_**
+- **_logback.xml_**
+- **_zarnow-ewus-1.0.0.jar_**
 
 umieszczamy w wybranym przez siebie folderze np. _"C:/zarnow-ewus/"_.
 
 ### 3. Konfiguracja aplikacji ### {#requirements-config}
-Konfiguracja aplikacji znajduje się w pliku application.properties i pozwala na łatwą parametrów bez konieczności zmian w kodzie. Dostarczony plik ma następujące parametry:
+
+Konfiguracja aplikacji znajduje się w pliku application.properties i pozwala na łatwą parametrów bez konieczności zmian w kodzie. Dostarczony plik ma
+następujące parametry:
+
 ```
 server.port=13000
 ```
-- aplikacja nasłuchuje na zapytania HTTP na porcie 13000 - gdyby inna aplikacja zajmowała ten port, aplikacja nie wystartuje - wtedy wystarczy zmienić tą wartość na dowolny inny numer. **UWAGA** najlepiej wybierać numer z zakresu 3000-65000.
+
+- aplikacja nasłuchuje na zapytania HTTP na porcie 13000 - gdyby inna aplikacja zajmowała ten port, aplikacja nie wystartuje - wtedy wystarczy zmienić tą
+  wartość na dowolny inny numer. **UWAGA** najlepiej wybierać numer z zakresu 3000-65000.
+
 ```
 logging.config=
 ```
@@ -109,12 +123,14 @@ Uruchomienie aplikacji zajmuje u mnie ok. 10 sekund. Jeżeli ostatni wpis zawier
 java -jar ewus-0.1.0.jar
 pause
 ```
-zakładamy oczywiście że plik ze skryptem znajduje się w tym samym folderze co aplikacja.
-Instrukcja _pause_ ma na celu zatrzymanie utrzymanie aktywnej linii komend w sytuacji gdyby start aplikacji się nie powiódł - w przeciwnym wypadku konsola natychmiast się zamyka.
-Taki skrypt można już łatwo dodać aby wykonywał się automatycznie przy starcie systemu.
 
-**Alternatywnie** moglibyśmy skonfigurować tak aby działała i była monitorowana przez system Windows jako usługa/proces/serwis. Na ten moment tego nie opisuję bo do tego celu trzeba by zainstalować prosty manager nssm i zarejestrować aplikację jako serwis z linii komend. Da się to zrobić ponieważ robiliśmy tak w pracy. 
-Zaletą takiego rozwiązania jest to że Windows może zarządzać takim procesem czyli:
+zakładamy oczywiście że plik ze skryptem znajduje się w tym samym folderze co aplikacja. Instrukcja _pause_ ma na celu zatrzymanie utrzymanie aktywnej linii
+komend w sytuacji gdyby start aplikacji się nie powiódł - w przeciwnym wypadku konsola natychmiast się zamyka. Taki skrypt można już łatwo dodać aby wykonywał
+się automatycznie przy starcie systemu.
+
+**Alternatywnie** moglibyśmy skonfigurować tak aby działała i była monitorowana przez system Windows jako usługa/proces/serwis. Na ten moment tego nie opisuję
+bo do tego celu trzeba by zainstalować prosty manager nssm i zarejestrować aplikację jako serwis z linii komend. Da się to zrobić ponieważ robiliśmy tak w
+pracy. Zaletą takiego rozwiązania jest to że Windows może zarządzać takim procesem czyli:
 
 - startować automatycznie na starcie systemu,
 - można go łatwo zatrzymać jak i wznowić,
@@ -130,18 +146,19 @@ Aplikacja wystawia do tego celu endpoint dla metody HTTP GET _"/ewus/check?pesel
 ```
 http://localhost:13000/ewus/check?pesel=WSTAW_SWOJ_NR_PESEL
 ```
+
 spowoduje wyświetlenie przybliżonego wyniku w formacie JSON:
 {"status":"PERSON_WITH_PESEL_EXISTS","pesel":"WSTAW_SWOJ_NR_PESEL","imie":"IMIE","nazwisko":"NAZWISKO,"ubezpieczony":true,"oznaczenieRecept":null}
 
-Jeżeli chcemy uzyskać ładnie sformatowany wynik możemy przekopiować treść wyniku [tutaj](https://jsonformatter.curiousconcept.com/), po kliknięciu przycisku "process" uzyskamy bardziej czytelny wynik:
+Jeżeli chcemy uzyskać ładnie sformatowany wynik możemy przekopiować treść wyniku [tutaj](https://jsonformatter.curiousconcept.com/), po kliknięciu przycisku "
+process" uzyskamy bardziej czytelny wynik:
 {
-   "status":"PERSON_WITH_PESEL_EXISTS",
-   "pesel":"WSTAW_SWOJ_NR_PESEL",
-   "imie":"IMIE",
-   "nazwisko":"NAZWISKO",
-   "ubezpieczony":true,
-   "oznaczenieRecept":null
-}
+"status":"PERSON_WITH_PESEL_EXISTS",
+"pesel":"WSTAW_SWOJ_NR_PESEL",
+"imie":"IMIE",
+"nazwisko":"NAZWISKO",
+"ubezpieczony":true,
+"oznaczenieRecept":null }
 
 Jak należy czytać powyższy wynik:
 
@@ -168,14 +185,15 @@ w razie czego możemy na ten temat pogadać.
 
 Wywołanie tej funkcjonalności powoduje następujące efekty:
 
-- jeżeli włączona jest opcja zapisu wyniku sprawdzenia do pliku to podobnie jak w przypadku pojedynczego sprawdzenia dla każdego numeru PESEL w folderze z wynikami i dnia sprawdzenia pojawi się stosowny plik.
+- jeżeli włączona jest opcja zapisu wyniku sprawdzenia do pliku to podobnie jak w przypadku pojedynczego sprawdzenia dla każdego numeru PESEL w folderze z
+  wynikami i dnia sprawdzenia pojawi się stosowny plik.
 - po każdym sprawdzeniu zostanie zapisany plik z raportem informującym o tym:
-	- ile numerów PESEL znaleziono, 
-	- ile zapytań o sprawdzenie statusu ubezpieczenia wysłano do eWUŚ-a,
-	- ile oraz wyszczególnione numery PESEL dla których sprawdzenie się nie powiodło, 
-	- ile oraz wyszczególnione numery PESEL które eWUŚ określił jako nie ubezpieczone.
+    - ile numerów PESEL znaleziono,
+    - ile zapytań o sprawdzenie statusu ubezpieczenia wysłano do eWUŚ-a,
+    - ile oraz wyszczególnione numery PESEL dla których sprawdzenie się nie powiodło,
+    - ile oraz wyszczególnione numery PESEL które eWUŚ określił jako nie ubezpieczone.
 
-Sprawdzenie statusu ubezpieczenia wszystkich pacjentów można wywołać 2 sposobami. 
+Sprawdzenie statusu ubezpieczenia wszystkich pacjentów można wywołać 2 sposobami.
 
 1. Automatycznie przez aplikację. Jeżeli aplikacja jest włączona, może ona samodzielnie wywoływać tą funkcjonalność zgodnie z harmonogramem ustawionym w konfiguracji.
 2. Podobnie jak w przypadku sprawdzenia statusu pojedynczego numeru pesel przez żądanie HTTP.  Wywołanie w przeglądarce następującego adresu URL:
@@ -204,13 +222,24 @@ Dalsze użytkowanie widzę na 2 sposoby:
 2. Uruchamiać aplikację tylko wtedy kiedy chcemy rzeczywiście wykonać sprawdzenie. Np. chcąc aby sprawdzenie zostało wykonane w piątek 00:30:00 uruchomić aplikację już w poprzedzający czwartek np. o 21:00.
 3. System Windows ma wbudowaną obsługę harmonogramów - można by je ręcznie skonfigurować aby uruchamiał plik ze skryptem _.bat_ uruchamiającym aplikację wtedy kiedy chcemy.
 
-Następnego dnia wyciągnąć z raportu listę numerów PESEL zidentyfikowanych jako nie ubezpieczonych pacjentów. Tą listę przekopiować do Excela tak jak do tej pory czy też inaczej, czy też wprowadzić do mMedica lub ProgramNZOZ.
+Następnego dnia wyciągnąć z raportu listę numerów PESEL zidentyfikowanych jako nie ubezpieczonych pacjentów. Tą listę przekopiować do Excela tak jak do tej pory
+czy też inaczej, czy też wprowadzić do mMedica lub ProgramNZOZ.
 
 ### 10. Możliwości rozszerzenia programu ### {#future-development}
 
 1. Tak jak pisałem wcześniej należałoby odfiltrowywać z listy PESEL-i do sprawdzenia osoby oznaczone jako zgon - musimy ustalić jak to zrobić.
-2. Zapisywanie wynikowej listy osób rozpoznanych jako nie posiadających ubezpieczenia do pliku typu CSV lub Excel - jak będę wiedział w jakim formacie miało by to być to można to zrobić. Możliwe jest również zapisywanie pozostałych danych.
-3. Automatyczne porównywanie z poprzednim wynikiem sprawdzenia, lub zbieranie tego do pliku Excela. Możliwe byłoby odczytywanie pliku Excela oraz jego modyfikacja np. dodanie kolumny zawierającej status ubezpieczenia w kolejnym dniu. Jednakże do tego celu efektywniejsze byłoby użycie bazy danych gdzie statusy byłby by składowane zaś sama aplikacja (lub odrębna) czytała by zeń dane i generowała plik Excel. 
-4. Na ten moment gdy stwierdzasz że pacjent powinien złożyć deklarację bo eWUŚ go wyrzuci na koniec miesiąca (na podstawie zmiany statusu ubezpieczenia 1 dnia roboczego) wprowadzasz stosowny marker do bazy ProgramNZOZ. Mogłoby to się dziać automatycznie. Jedynie na ten moment nie jestem pewien czy będę w stanie zapisywać do bazy _Bazap_. Mianowicie przy odczytywaniu listy numerów PESEL musiałem wyciągnąć wszystkie wpisy i dopiero w nich wyszukiwać zamiast wysłać zapytanie do bazy i dostać jedynie interesujące (np. te które są poprawnymi numerami PESEL jak opisane w sekcji [sprawdzania wszystkich numerów](#business-check-all-patients)).
-5. Mogę zrobić prostą stronę Internetową (w osobnej aplikacji) która łączyła by się z tą aplikacją przez REST API. Ta strona robiła by praktycznie to samo co ta dostarczana przez eWUŚ z tą różnicą że nie trzeba byłoby się logować - jedynie byłby pojedynczy input na PESEL i następnie byłby wyświetlany wynik. Jednakże byłoby to samo co np. Kasia teraz robi w rejestracji czyli kopiuje PESEL z ProgramNZOZ do mMedica i tam sprawdza. Jedyna różnica byłaby taka że można by udostępnić tą stronę w sieci wewnętrznej w Żarnowie bez ograniczenia liczby równocześnie działających instancji tak jak jest w tej chwili.
-Po odpowiednich modyfikacjach możliwe byłoby sprawdzenie kilka PESELI jednocześnie np. do max 10, choć nie wiem czy miałoby to jakikolwiek sens.
+2. Zapisywanie wynikowej listy osób rozpoznanych jako nie posiadających ubezpieczenia do pliku typu CSV lub Excel - jak będę wiedział w jakim formacie miało by
+   to być to można to zrobić. Możliwe jest również zapisywanie pozostałych danych.
+3. Automatyczne porównywanie z poprzednim wynikiem sprawdzenia, lub zbieranie tego do pliku Excela. Możliwe byłoby odczytywanie pliku Excela oraz jego
+   modyfikacja np. dodanie kolumny zawierającej status ubezpieczenia w kolejnym dniu. Jednakże do tego celu efektywniejsze byłoby użycie bazy danych gdzie
+   statusy byłby by składowane zaś sama aplikacja (lub odrębna) czytała by zeń dane i generowała plik Excel.
+4. Na ten moment gdy stwierdzasz że pacjent powinien złożyć deklarację bo eWUŚ go wyrzuci na koniec miesiąca (na podstawie zmiany statusu ubezpieczenia 1 dnia
+   roboczego) wprowadzasz stosowny marker do bazy ProgramNZOZ. Mogłoby to się dziać automatycznie. Jedynie na ten moment nie jestem pewien czy będę w stanie
+   zapisywać do bazy _Bazap_. Mianowicie przy odczytywaniu listy numerów PESEL musiałem wyciągnąć wszystkie wpisy i dopiero w nich wyszukiwać zamiast wysłać
+   zapytanie do bazy i dostać jedynie interesujące (np. te które są poprawnymi numerami PESEL jak opisane w
+   sekcji [sprawdzania wszystkich numerów](#business-check-all-patients)).
+5. Mogę zrobić prostą stronę Internetową (w osobnej aplikacji) która łączyła by się z tą aplikacją przez REST API. Ta strona robiła by praktycznie to samo co ta
+   dostarczana przez eWUŚ z tą różnicą że nie trzeba byłoby się logować - jedynie byłby pojedynczy input na PESEL i następnie byłby wyświetlany wynik. Jednakże
+   byłoby to samo co np. Kasia teraz robi w rejestracji czyli kopiuje PESEL z ProgramNZOZ do mMedica i tam sprawdza. Jedyna różnica byłaby taka że można by
+   udostępnić tą stronę w sieci wewnętrznej w Żarnowie bez ograniczenia liczby równocześnie działających instancji tak jak jest w tej chwili. Po odpowiednich
+   modyfikacjach możliwe byłoby sprawdzenie kilka PESELI jednocześnie np. do max 10, choć nie wiem czy miałoby to jakikolwiek sens.
