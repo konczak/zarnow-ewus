@@ -3,6 +3,8 @@ package pl.konczak.nzoz.ewus.web.restapi.ewus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public class CheckStatusResponse {
@@ -18,5 +20,7 @@ public class CheckStatusResponse {
     private final boolean ubezpieczony;
 
     private final String oznaczenieRecept;
+
+    private final List<AdditionalInfo> informacjeDodatkowe;
 
 }
