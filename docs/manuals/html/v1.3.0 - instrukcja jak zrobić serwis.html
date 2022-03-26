@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>manual</title>
+    <link rel="stylesheet" href="https://stackedit.io/style.css"/>
+</head>
+
+<body class="stackedit">
+<div class="stackedit__html"><h1 id="żarnów-ewuś-v1.3.0">Żarnów eWUŚ v1.3.0</h1>
+    <h3 id="nssm">1. nssm</h3>
+    <p>Na początek trzeba pobrać <a href="nssm">https://nssm.cc/</a> ja wybrałem wersję 2.24.<br>
+        <strong>UWAGA</strong> Ponieważ nssm nie ma pliku instalatora a chcemy aby był dostępny z konsoli musimy wszystko przygotować, a najlepiej będzie zrobić
+        tak:</p>
+    <ul>
+        <li>w “Program files” (odpowiedniego dla typu systemu x86/x64) tworzymy folder <em>“nssm”</em> i kopiujemy do niego <em>“nssm.exe”</em> z pobranej
+            paczki - oczywiście wybierając ten pasujący do systemu,
+        </li>
+        <li>następnie musimy dodać go do systemowej zmiennej <em>PATH</em>. Klikamy prawym na ikonie <em>“Komputer”</em> i wybieramy właściwości.<br>
+            Dla Windows 7 i nowszych:
+            <ul>
+                <li>wybieramy <em>“Zaawansowane ustawienia systemu”</em>,</li>
+                <li>wybieramy zakładkę <em>“Zaawansowane”</em> i klikamy przycisk <em>“Zmienne środowiskowe”</em>,</li>
+                <li>przechodzimy do dolnego okienka <em>“Zmienne systemowe”</em> i odszukujemy zmienną o nazwie <em>PATH</em>, i klikamy przycisk _“Edytuj”,
+                </li>
+                <li>edytujemy pole <em>“Wartość zmiennej”</em> na samym końcu dodając średnik <em>“;”</em> (służy do oddzielania kolejnych elementów listy),
+                </li>
+                <li>teraz dodajemy ścieżkę do folderu gdzie znajduje się <em>“nssm.exe”</em> z “Program files” u mnie wygląda ona następująco:</li>
+            </ul>
+        </li>
+    </ul>
+    <pre class=" language-text"><code class="prism  language-text"> c:\Program Files\nssm\
+</code></pre>
+    <p>zatwierdzamy wszystko ok, tym samym zamykając okna <em>“Zaawansowanych ustawień systemu”</em>.</p>
+    <ul>
+        <li>aby zweryfikować że poprawnie skonfigurowaliśmy <em>“nssm”</em> otwieramy <em>“cmd”</em> (uwaga jeżeli była otwarta w trakcie wprowadzania zmian to
+            trzeba ją zrestartować) i wprowadzamy polecenie <em>“nssm”</em> i Enter.<br>
+            Jeżeli dostaliśmy komunikat że polecenia nie rozpoznano to znaczy że coś jest źle skonfigurowane.<br>
+            Jeżeli wszystko jest ok wyskoczy nam numer wersji oraz lista dostępnych poleceń.
+        </li>
+    </ul>
+    <h3 id="aplikacja-jako-serwis">2. aplikacja jako serwis</h3>
+    <ul>
+        <li>upewniamy się że aplikacja jest wyłączona,</li>
+        <li>następnie zmieniamy nazwę pliku aplikacji z <em>“zarnow-ewus-1.0.0.jar”</em> na <em>“zarnow-ewus.jar”</em>.<br>
+            Robimy to po to aby uniknąć w przyszłości przy wgrywaniu nowej wersji aplikacji konieczności usuwania serwisu i konfigurowania na nowo. Ja też będę
+            od tej pory dostarczał aplikację bez numeru wersji w nazwie,
+        </li>
+        <li>w linii komend zmieniamy folder na ten w którym znajduje się aplikacja (plik <em>“zarnow-ewus.jar”</em>),</li>
+        <li>w folderze z aplikacją tworzymy skrypt <em>“run.bat”</em> który zawiera następujące polecenie:</li>
+    </ul>
+    <pre class=" language-shell"><code class="prism  language-shell"> java -jar zarnow-ewus.jar
+</code></pre>
+    <ul>
+        <li>z pomocą <em>“nssm”</em> rejestrujemy skrypt jako usługę (serwis) Windows-owy następującą komendą:</li>
+    </ul>
+    <pre class=" language-shell"><code class="prism  language-shell"> nssm install NAZWA_NASZEGO_SERWISU "ŚCIEŻKA_DO_SKRYPTU\run.bat"
+</code></pre>
+    <p>przykładowo u mnie wyglądało ono następująco:</p>
+    <pre class=" language-shell"><code class="prism  language-shell"> nssm install zarnow-ewus "e:\programowanie\nzoz\ewus-prod\run.bat"
+</code></pre>
+    <p>jeżeli instalacja przebiegła pomyślnie to pojawił się komunikat <em>“Service “zarnow-ewus” installed successfully!”</em>.<br>
+        Natomiast przeglądając listę usług np. przez <em>“services.msc”</em> możemy znaleźć nasz serwis na liście i zobaczyć że ma on status uruchomienia
+        Automatyczny oraz że jest aktualnie wyłączony.<br>
+        Po restarcie systemu aplikacja zostanie uruchomiona automatycznie.</p>
+    <p><strong>UWAGA</strong> naturalnym wydaje się że moglibyśmy pozbyć się skryptu <em>“run.bat”</em> i bezpośrednio zarejestrować jako usługę <em>“java -jar
+        zarnow-ewus.jar”</em> jednakże w tej sytuacji jest problem.<br>
+        Mianowicie folderem aplikacji staje się folder z Javą i aplikacja nie znajduje wtedy pliku konfiguracyjnego <em>“application.properties”</em>.</p>
+    <h3 id="ręczne-startowanie-i-zatrzymywanie-serwisu">3. ręczne startowanie i zatrzymywanie serwisu</h3>
+    <ul>
+        <li>aby uruchomić usługę z linii poleceń wywołujemy komendę:</li>
+    </ul>
+    <pre class=" language-shell"><code class="prism  language-shell"> nssm start NAZWA_NASZEGO_SERWISU
+</code></pre>
+    <p>przykładowo u mnie:</p>
+    <pre class=" language-shell"><code class="prism  language-shell"> nssm start zarnow-ewus
+</code></pre>
+    <ul>
+        <li>aby zatrzymać usługę z linii poleceń wywołujemy komendę:</li>
+    </ul>
+    <pre class=" language-shell"><code class="prism  language-shell"> nssm stop NAZWA_NASZEGO_SERWISU
+</code></pre>
+    <p>przykładowo u mnie:</p>
+    <pre class=" language-shell"><code class="prism  language-shell"> nssm stop zarnow-ewus
+</code></pre>
+    <ul>
+        <li>aby nie musieć pamiętać tych komend i wprowadzać ich każdorazowo sugeruję utworzyć 2 skrypty <em>“.bat”</em>: <em>“start.bat”</em> i
+            <em>“stop.bat”</em> - analogicznie w każdym z nich wystarczy podać to samo polecenie co w/w.<br>
+            Skrypty można umieścić w folderze z aplikacją lub gdziekolwiek indziej - tylko wtedy najlepiej nadać im bardziej adekwatne nazwy.
+        </li>
+    </ul>
+    <h3 id="weryfikacja">4. weryfikacja</h3>
+    <p>Aby zweryfikować że aplikacja działa powinniśmy wykonać 2 rzeczy:</p>
+    <ul>
+        <li>wykonać zapytanie przez przeglądarkę:</li>
+    </ul>
+    <pre class=" language-text"><code class="prism  language-text"> http://localhost:13000/ewus/check?pesel=WSTAW_SWOJ_NR_PESEL
+</code></pre>
+    <ul>
+        <li>oraz zajrzeć do pliku <em>“ewus.log”</em> i upewnić się że znalazły się tam bieżące wpisy.</li>
+    </ul>
+    <h3 id="opcjonalne-usprawnienie">5. opcjonalne usprawnienie</h3>
+    <p>Ponieważ gdy aplikacja działa jako serwis to nie widać konsoli. Jednakże logi są wpisywane jednocześnie do pliku jak i konsoli.<br>
+        Gdy mówimy o serwisie logi konsoli są przekierowywane do logów systemowych.<br>
+        Aplikacja może generować duże ilości logów systemowych co jest zupełnie zbędne.<br>
+        Aby tego uniknąć możemy zmienić konfigurację w pliku <em>“logback.xml”</em>. Interesuje nas linia 29:</p>
+    <pre class=" language-xml"><code class="prism  language-xml"> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>appender-ref</span> <span
+            class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>STDOUT<span
+            class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+</code></pre>
+    <p>Możemy ją całkowicie usunąć lub zamienić “za-komentować”:</p>
+    <pre class=" language-xml"><code class="prism  language-xml"> <span class="token comment">&lt;!--&lt;appender-ref ref="STDOUT" /&gt;--&gt;</span>
+</code></pre>
+    <p>po zmianie restart aplikacji/serwisu jest potrzebny aby zmiana zaczęła obowiązywać.</p>
+</div>
+</body>
+
+</html>

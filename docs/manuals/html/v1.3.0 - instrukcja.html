@@ -1,0 +1,392 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>manual</title>
+    <link rel="stylesheet" href="https://stackedit.io/style.css"/>
+</head>
+
+<body class="stackedit">
+<div class="stackedit__html"><h1 id="żarnów-ewuś-v1.3.0">Żarnów eWUŚ v1.3.0</h1>
+    <h3 id="java-8">1. Java 8</h3>
+    <ul>
+        <li><strong>UWAGA</strong> Java ma brzydki zwyczaj że wersja 8 = 1.8 (analogicznie dla wersji 6 oraz 7)</li>
+        <li>sprawdź czy Java 8 jest zainstalowana.</li>
+        <li>otwórz menu Start,</li>
+        <li>wybierz pozycję uruchom i wpisz <strong><em>cmd</em></strong> lub wpisz <strong><em>cmd</em></strong> w okno wyszukiwania,</li>
+        <li>następnie w linii komend wprowadź:</li>
+    </ul>
+    <pre class=" language-shell"><code class="prism  language-shell"> java -version
+</code></pre>
+    <ul>
+        <li>jeżeli pojawił się komunikat:</li>
+    </ul>
+    <pre class=" language-shell"><code class="prism  language-shell"> java version "1.8***"
+</code></pre>
+    <p>to znaczy że Java w wymaganej wersji jest już zainstalowana i można przejść do <a href="#dostarczone-pliki-i-lokalizacja-aplikacji">następnego punktu</a>.
+    </p>
+    <ul>
+        <li>jeżeli pojawił się komunikat że polecenia nie odnaleziono lub numer wersji jest mniejszy niż 1.8, konieczne będzie pobranie oraz zainstalowanie Java
+            Runtime<br>
+            Edition (JRE) w wersji 8. Należy ją pobrać <a href="http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html">tutaj</a> -
+            sugeruję wybór<br>
+            wersji offline dzięki temu cały plik instalacyjny zostanie pobrany na dysk lokalny. Należy jeszcze dobrać wersję do systemu operacyjnego - Windows
+            x86 dla<br>
+            32-bitowego lub Windows x64 dla 64-bitowego.
+        </li>
+        <li>podczas instalacji postępuj zgodnie z instrukcjami.</li>
+        <li>po zakończeniu instalacji wymagany jest restart linii komend.</li>
+    </ul>
+    <h3 id="dostarczone-pliki-i-lokalizacja-aplikacji">2. Dostarczone pliki i lokalizacja aplikacji</h3>
+    <p>Dostarczone pliki i foldery:</p>
+    <ul>
+        <li><strong><em>logs/</em></strong></li>
+        <li><strong><em>results/</em></strong></li>
+        <li><strong><em>application.properties</em></strong></li>
+        <li><strong><em>instrukcja.html</em></strong></li>
+        <li><strong><em>logback.xml</em></strong></li>
+        <li><strong><em>zarnow-ewus-1.0.0.jar</em></strong></li>
+    </ul>
+    <p>umieszczamy w wybranym przez siebie folderze np. <em>“C:/zarnow-ewus/”</em>.</p>
+    <h3 id="konfiguracja-aplikacji">3. Konfiguracja aplikacji</h3>
+    <p>Konfiguracja aplikacji znajduje się w pliku <em>application.properties</em> i pozwala na łatwą parametrów bez konieczności zmian w kodzie.<br>
+        Dostarczony plik ma następujące parametry:</p>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> server.port</span><span class="token punctuation">=</span><span
+            class="token attr-value">13000  </span>
+</code></pre>
+    <ul>
+        <li>aplikacja nasłuchuje na zapytania HTTP na porcie 13000 - gdyby inna aplikacja zajmowała ten port, aplikacja nie wystartuje - wtedy wystarczy zmienić
+            tą<br>
+            wartość na dowolny inny numer. <strong>UWAGA</strong> najlepiej wybierać numer z zakresu 3000-65000.
+        </li>
+    </ul>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> logging.config</span><span
+            class="token punctuation">=</span> <span class="token attr-value"> </span>
+</code></pre>
+    <ul>
+        <li>ten parametr definiuje ścieżkę oraz nazwę pliku gdzie znajduje się plik konfiguracyjny logów które będzie generować aplikacja.<br>
+            Konfiguracja logów jest opisana w <a href="#konfiguracja-log%C3%B3w">osobnym punkcie</a>.<br>
+            Plik konfiguracyjny logów to dostarczony logback.xml. Przykładowa wartość tego parametru to <em>“C:/zarnow-ewus/logback.xml”</em></li>
+    </ul>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> ewus.auth.url</span><span
+            class="token punctuation">=</span><span class="token attr-value">https://ewus.nfz.gov.pl/ws-broker-server-ewus/services/Authewus.broker.url=https://ewus.nfz.gov.pl/ws-broker-server-ewus/services/ServiceBroker  </span>
+</code></pre>
+    <ul>
+        <li>te 2 parametry definiuję adres URL serwerów NFZ służących do logwania oraz obsługi zapytań o status ubezpieczenia pacjenta.<br>
+            Domyślnie są ustawione na aktualny adres i nie ma potrzeby ich zmieniać.
+        </li>
+    </ul>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> ewus.credentials.ow</span><span
+            class="token punctuation">=</span><span class="token attr-value">05ewus.credentials.user-type=SWD  </span>
+<span class="token attr-name">ewus.credentials.identyfikator-swiadczeniodawcy</span><span class="token punctuation">=</span> <span
+                class="token attr-value"> </span>
+<span class="token attr-name">ewus.credentials.login</span><span class="token punctuation">=</span> <span class="token attr-value"> </span>
+<span class="token attr-name">ewus.credentials.password</span><span class="token punctuation">=</span> <span class="token attr-value"> </span>
+</code></pre>
+    <ul>
+        <li>powyższe 5 parametrów określa sposób oraz dane logowania do serwisów NFZ. Kolejno:
+            <ul>
+                <li><em>“ow”</em> to identyfikator oddziału a wartość <em>“05”</em> oznacza łódzki.</li>
+                <li><em>“user-type”</em> określa typ użytkownika - w naszym przypadku poprawną wartością jest <em>“SWD”</em> oznaczające świadczeniodawcę.</li>
+                <li><em>“identyfikator-swiadczeniodawcy”</em> tu należy wprowadzić stosowny numer.</li>
+                <li>Na końcu zostają już proste rzeczy czyli <em>“login”</em> oraz <em>“password”</em> czyli hasło.<br>
+                    Ponieważ hasło musi być regularnie zmieniane to pole będzie najczęściej aktualizowane.<br>
+                    <strong>Należy pamiętać że po wprowadzeniu nowego hasła konieczny jest restart aplikacji.</strong></li>
+            </ul>
+        </li>
+    </ul>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> ewus.client.name</span><span
+            class="token punctuation">=</span><span class="token attr-value">zarnow-nzoz-ewusewus.client.version=1.0.0  </span>
+</code></pre>
+    <ul>
+        <li>nazwa oraz wersja aplikacji-klienta która będzie kontaktowała się z serwerami NFZ.<br>
+            Możemy w przyszłości pomyśleć o tym aby te parametry były odczytywane automatycznie z aplikacji - jednakże podczas testów łatwiej mi było móc te
+            parametry zmieniać.
+        </li>
+    </ul>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> ewus.persistence.execute</span><span
+            class="token punctuation">=</span><span class="token attr-value">trueewus.persistence.folder=  </span>
+</code></pre>
+    <ul>
+        <li>dotyczą one zapisu wyników (tego co pobrano z serwera eWUŚ):
+            <ul>
+                <li>pierwszy parametr mówi o tym czy wyniki pobrane z systemu eWUŚ mają być zapisywane do plików.<br>
+                    Przyjmuje wartości typu boolean czyli <em>“true”</em> lub <em>“false”</em>.<br>
+                    Ustawienie wartości <em>“false”</em> sprawi że poszczególne wyniki nie będą zapisywane do pliku.<br>
+                    Jednakże nie będzie miało to wpływu na zapis raportu podsumowującego czy też wyniki zwraca przez REST API np. w przeglądarce.
+                </li>
+                <li>drugi parametr <em>“folder”</em> musi określać ścieżkę gdzie będą zapisywane raporty oraz poszczególne wyniki.<br>
+                    Sugeruję podanie tutaj ścieżki do dostarczonego folderu <strong><em>results/</em></strong> jednakżę nie ma takiego obowiązku.<br>
+                    Przykładowa poprawna wartość to <em>“C:/zarnow-ewus/results/”</em></li>
+            </ul>
+        </li>
+    </ul>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> database.driver</span><span
+            class="token punctuation">=</span><span class="token attr-value">com.googlecode.paradox.Driverdatabase.url=jdbc:paradox:TUTAJ_FOLDER_GDZIE_SIEDZI_BAZA  </span>
+</code></pre>
+    <ul>
+        <li>dotyczą ustawień związanych z bazą danych:
+            <ul>
+                <li>pierwszego parametru nie trzeba zmieniać jednakże jest on potrzebny aplikacji do odszukania sterownika który pozwoli na komunikację z bazą
+                    danych typu Paradox.
+                </li>
+                <li>drugi parametr zawiera prefix określający rodzaj silnika Java który będzie wykorzystywany przy łączeniu z bazą oraz rodzaj bazy danych a na
+                    końcu musi znaleźć się ścieżka do folderu z bazą <em>“Bazap”</em>.<br>
+                    Przykładowa poprawna wartość tego parametru to <em>“jdbc:paradox:C:/!ProgramNZOZ/folderZawierajacyBaze”</em></li>
+            </ul>
+        </li>
+    </ul>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> job.checkCWUForAll.cron</span><span
+            class="token punctuation">=</span><span class="token attr-value">0 30 0 * * MON-FRI  </span>
+</code></pre>
+    <ul>
+        <li>ostatni parametr definiuje kiedy aplikacja powinna rozpocząć wykonywanie sprawdzenia statusu ubezpieczenia wszystkich pacjentów.<br>
+            Wartość tego parametru musi być zgodna z wyrażeniem “cron expression”.<br>
+            “Cron expression” pozwala właśnie na elastyczne określanie czasów wykonania pewnych powtarzalnych operacji.<br>
+            Dokładny opis można znaleźć na <a href="https://pl.wikipedia.org/wiki/Cron">Wikipedi</a>, choć niestety polski opis jest bardzo skrótowy - wersja
+            angielska jest znacznie lepsza.<br>
+            Domyślna wartość która jest ustawiona oznacza dokładnie: każdego dnia od poniedziałku do piątku o godzinie 00:30:00.<br>
+            Dokładny efekt wywołania tej funkcjonalności znajduje się w sekcji <a href="#sprawdzenie-statusu-ubezpieczenia-wszystkich-pacjent%C3%B3w">sprawdzenie
+                wszystkich pacjentów</a></li>
+    </ul>
+    <h3 id="konfiguracja-logów">4. Konfiguracja logów</h3>
+    <p>Na wstępie - po co są logi z aplikacji?<br>
+        Aby można było zweryfikować co aplikacja robiła - jakie dostała żądania np. z REST API czy też że rozpoczął się proces automatyczny.<br>
+        Również z logów można wyczytać jak przebiegała komunikacja z serwerami NFZ.<br>
+        Logi będą również miejscem gdzie zostaną zapisane błędy które być może pojawią się w aplikacji np. że nie można było dostać się do bazy danych lub zapis
+        do pliku się nie powiódł.<br>
+        Dostarczony plik <strong><em>logback.xml</em></strong> ma kilka domyślnych ustawień:</p>
+    <ul>
+        <li>zdarzenia z bieżącego dnia będą zapisywane do pliku <em>“zarnow-ewus.log”</em>,</li>
+        <li>zdarzenia z dni poprzedzających będą zapisane w plikach _“zarnow-ewus-YYYY-MM-DD.log”_czyli z sufixem z jakiego dnia pochodzi log,</li>
+        <li>aplikacja będzie automatycznie usuwać logi starsze niż 30 dni - taka wartość zapewnia optymalny czas na zabezpieczenie pliku logu w razie
+            wystąpienia błędów,<br>
+            a jednocześnie zabezpiecza system przed zużywaniem nadmiernej ilości przestrzeni dyskowej.
+        </li>
+    </ul>
+    <p>Przykładowy wpis z logu:</p>
+    <pre class=" language-log"><code class="prism  language-log"> INFO  2017-02-26 20:54:09,148 http-nio-13000-exec-1          p.k.n.e.d.a.LoginService       logged with session &lt;5F145366E31FE8EDBA1BCFA0797A1AA0&gt; authToken &lt;BSVDud4n_4KGyyUO8BRZWZ&gt; response &lt;[000] U&amp;#380;ytkownik zosta&amp;#322; prawid&amp;#322;owo zalogowany.&gt;
+</code></pre>
+    <p>mówi o tym że:</p>
+    <ul>
+        <li>wystąpiło zdarzenie “informacyjne” (inne typy to np. ERROR, WARN(ING)),</li>
+        <li>miało miejsce 26 lutego 2017 roku o godzinie 20:54:09 i 148 milisekund,</li>
+        <li>wątek w którym rekord został zalogowany to “http-nio-13000-exec-1”,</li>
+        <li>klasa z której pochodzi wpis to “p.k.n.e.d.a.LoginService” gdzie pojedyncze litery to skrót identyfikujący pakiet (nic czym musicie się przejmować;)
+            ),
+        </li>
+        <li>wiadomość tego logu mówi:<br>
+            zalogowano poprawnie, wynik logowanie to ID sesji “5F145366E31FE8EDBA1BCFA0797A1AA0” ID tokenu autentykacyjnego “BSVDud4n_4KGyyUO8BRZWZ”<br>
+            zaś serwer NFZ dodał od siebie informacje o treści: “[000] Użytkownik został prawidłowo zalogowany.”
+        </li>
+    </ul>
+    <p>Konieczna jest tylko 1 zmiana w pliku <strong><em>logback.xml</em></strong>, dokładnie w linijce nr 4:</p>
+    <pre class=" language-xml"><code class="prism  language-xml"> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span
+            class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>DESTINATION_FOLDER<span
+            class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span
+            class="token punctuation">=</span><span class="token punctuation">"</span>TUTAJ_FOLDER_Z_APLIKACJA/logs<span
+            class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+</code></pre>
+    <p>parametr value trzeba ustawić tak aby wskazywał na folder w którym będą umieszczane pliki z logami.<br>
+        Sugeruję przechowywać logi w załączonym folderze <strong><em>logs/</em></strong> jednakże nie jest to konieczne.<br>
+        Przykładowa poprawna wartość dla linijki nr 4 to:</p>
+    <pre class=" language-xml"><code class="prism  language-xml"> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span
+            class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>DESTINATION_FOLDER<span
+            class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span
+            class="token punctuation">=</span><span class="token punctuation">"</span>C:/zarnow-ewus/logs<span class="token punctuation">"</span></span> <span
+            class="token punctuation">/&gt;</span></span>
+</code></pre>
+    <p><strong>UWAGA</strong>: na końcu nie dajemy znaku “/” gdyż jest on doklejany automatycznie w konfiguracji.</p>
+    <h3 id="uruchomienie-aplikacji">5. Uruchomienie aplikacji</h3>
+    <p>Aby uruchomić aplikację odpalamy linię komend <strong>cmd</strong>, zmieniamy folder na ten w którym znajduje się nasza aplikacja czyli plik <strong><em>zarnow-ewus-1.0.0.jar</em></strong>,
+        następnie wprowadzamy komendę:</p>
+    <pre class=" language-shell"><code class="prism  language-shell"> java -jar zarnow-ewus-1.0.0.jar
+</code></pre>
+    <p>Uruchomienie aplikacji zajmuje u mnie ok. 10 sekund.<br>
+        Jeżeli ostatni wpis zawiera przybliżony komunikat:<br>
+        <em>“Started Application in 10.82 seconds (JVM running for 11.906)”</em> to znaczy że aplikacja uruchomiła się poprawnie.<br>
+        W przeciwnym wypadku można odczytać przyczynę błędu z konsoli lub pliku z logiem.</p>
+    <p><strong>Opcjonalnie</strong> dla wygody można opakować to zapytanie w wykonywalny skrypt “.bat” którego kod mógłby wyglądać następująco:</p>
+    <pre class=" language-shell"><code class="prism  language-shell"> java -jar ewus-0.1.0.jar pause
+</code></pre>
+    <p>zakładamy oczywiście że plik ze skryptem znajduje się w tym samym folderze co aplikacja.<br>
+        Instrukcja <em>pause</em> ma na celu zatrzymanie utrzymanie aktywnej linii komend w sytuacji gdyby start aplikacji się nie powiódł - w przeciwnym
+        wypadku konsola natychmiast się zamyka.<br>
+        Taki skrypt można już łatwo dodać aby wykonywał się automatycznie przy starcie systemu.</p>
+    <p><strong>Alternatywnie</strong> moglibyśmy skonfigurować tak aby działała i była monitorowana przez system Windows jako usługa/proces/serwis.<br>
+        Na ten moment tego nie opisuję bo do tego celu trzeba by zainstalować prosty manager nssm i zarejestrować aplikację jako serwis z linii komend.<br>
+        Da się to zrobić ponieważ robiliśmy tak w pracy.<br>
+        Zaletą takiego rozwiązania jest to że Windows może zarządzać takim procesem czyli:</p>
+    <ul>
+        <li>startować automatycznie na starcie systemu,</li>
+        <li>można go łatwo zatrzymać jak i wznowić,</li>
+        <li>w razie błędu otrzymamy stosowny komunikat.</li>
+    </ul>
+    <h3 id="cel-aplikacji">6. Cel aplikacji</h3>
+    <p>Celem aplikacji jest sprawdzenie statusu ubezpieczenia pacjenta w systemie eWUŚ. Można to zrobić dla pojedynczego numeru PESEL lub dla wszystkich
+        pacjentów znajdujących się w bazie <em>“Bazap”</em>.</p>
+    <h3 id="sprawdzenie-statusu-ubezpieczenia-1-pacjenta">7. Sprawdzenie statusu ubezpieczenia 1 pacjenta</h3>
+    <p>Sprawdzenie statusu ubezpieczenia pojedynczego pacjenta jest możliwe wykonując żądanie HTTP do wystawionego przez aplikację REST API.<br>
+        Najprostszą opcją jest wykorzystanie do tego celu przeglądarki.</p>
+    <p>Aplikacja wystawia do tego celu endpoint dla metody HTTP GET <em>“/ewus/check?pesel=TUTAJ_NUMER_PESEL”</em>.<br>
+        Zakładając że aplikacja pracuje na domyślnym porcie 13000 wprowadzenie w adresie przeglądarki:</p>
+    <pre class=" language-text"><code class="prism  language-text"> http://localhost:13000/ewus/check?pesel=WSTAW_SWOJ_NR_PESEL
+</code></pre>
+    <p>spowoduje wyświetlenie przybliżonego wyniku w formacie JSON:</p>
+    <pre class=" language-json"><code class="prism  language-json"><span class="token punctuation">{</span><span class="token string">"status"</span><span
+            class="token punctuation">:</span> <span class="token string">"PERSON_WITH_PESEL_EXISTS"</span><span class="token punctuation">,</span><span
+            class="token string">"pesel"</span><span class="token punctuation">:</span> <span class="token string">"WSTAW_SWOJ_NR_PESEL"</span><span
+            class="token punctuation">,</span><span class="token string">"imie"</span><span class="token punctuation">:</span> <span
+            class="token string">"IMIE"</span><span class="token punctuation">,</span><span class="token string">"nazwisko"</span><span
+            class="token punctuation">:</span> <span class="token string">"NAZWISKO"</span><span class="token punctuation">,</span><span class="token string">"ubezpieczony"</span><span
+            class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><span class="token string">"oznaczenieRecept"</span><span
+            class="token punctuation">:</span> <span class="token keyword">null</span><span class="token punctuation">}</span>
+</code></pre>
+    <p>Jeżeli chcemy uzyskać ładnie sformatowany wynik możemy przekopiować treść wyniku <a href="https://jsonformatter.curiousconcept.com/">tutaj</a>,<br>
+        po kliknięciu przycisku “process” uzyskamy bardziej czytelny wynik:</p>
+    <pre class=" language-json"><code class="prism  language-json"><span class="token punctuation">{</span>
+  <span class="token string">"status"</span><span class="token punctuation">:</span> <span class="token string">"PERSON_WITH_PESEL_EXISTS"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"pesel"</span><span class="token punctuation">:</span> <span class="token string">"WSTAW_SWOJ_NR_PESEL"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"imie"</span><span class="token punctuation">:</span> <span class="token string">"IMIE"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"nazwisko"</span><span class="token punctuation">:</span> <span class="token string">"NAZWISKO"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"ubezpieczony"</span><span class="token punctuation">:</span> <span class="token boolean">true</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"oznaczenieRecept"</span><span class="token punctuation">:</span> <span class="token keyword">null</span>  
+<span class="token punctuation">}</span>  
+</code></pre>
+    <p>Jak należy czytać powyższy wynik:</p>
+    <ul>
+        <li><strong>status</strong> zawiera informacje czy w systemach NFZ osoba o podanym PESEL istnieje. Możliwe wartości to:
+            <ul>
+                <li><em>“PERSON_WITH_PESEL_DOES_NOT_EXISTS”</em>, gdy wskazana osoba nie istnieje,</li>
+                <li><em>“PERSON_WITH_PESEL_EXISTS”</em> gdy osoba o podanym pesel istnieje,</li>
+                <li><em>“PERSON_EXISTS_BUT_PESEL_IS_CANCELED”</em> gdy numer PESEL został anulowany przez NFZ.</li>
+            </ul>
+        </li>
+        <li><strong>pesel</strong> tu będzie powtórzony numer pesel dla którego zostało wykonane sprawdzenie,</li>
+        <li><strong>imie</strong> tu będzie imię osoby do której należy numer PESEL lub <em>null</em> gdy osoba nie istnieje,</li>
+        <li><strong>nazwisko</strong> tu będzie nazwisko osoby do której należy numer PESEL lub <em>null</em> gdy osoba nie istnieje,</li>
+        <li><strong>ubezpieczony</strong> posiada wartość <em>boolean</em> i będzie ustawiona na <em>true</em> tylko gdy eWUŚ zwróci że osoba jest ubezpieczona.<br>
+            W przeciwnym wypadku będzie <em>false</em> - również gdy osoba nie istnieje wartość będzie równa <em>false</em>,
+        </li>
+        <li><strong>oznaczenieRecept</strong> jest to opcjonalna zmienna typu String,<br>
+            jeżeli system eWUŚ zwróci że pacjent ma dodatkowe oznaczenie na recepcie to stosowna wartość będzie tu podana,<br>
+            w przeciwnym wypadku będzie <em>null</em>.<br>
+            Na ten moment dokumentacja eWUŚ-a mówi że jedyną dopuszczalną wartścią jest <em>“DN”</em>.
+        </li>
+    </ul>
+    <p><strong>UWAGA</strong> na ten moment gdyby sprawdzenie się nie powiodło bo np. serwer eWUŚ był niedostępny lub logowanie się nie powiodło endpoint będzie
+        zwracał błąd i status HTTP 500 Internal Server Error.<br>
+        Jest to brzydkie rozwiązanie i należałoby to poprawić, jednakże na ten moment nie wiedząc jakie będą potrzeby nic konkretnego w związku z tym nie
+        robiłem.</p>
+    <p>Dodatkowo jeżeli w konfiguracji włączony jest zapis statusu do pliku to w folderze z wynikami w folderze reprezentującym bieżący dzień np. <em>“2017-02-26”</em>
+        pojawi się plik XML z wynikiem zwróconym z systemu eWUŚ.<br>
+        Nazwa pliku będzie składać się z daty dokładnej co do sekundy oraz numeru PESEL który był sprawdzany np. <em>“2017-02-26-20-54-09_87080203679.xml”</em>
+        <strong>Plik ten można zaimportować do programu mMedica.</strong></p>
+    <p>Na szybko tylko spojrzałem w Google jak z programu NZOZ w C++ można by wykonać stosowne zapytania i następujące strony wyglądają interesująco:<br>
+        <a href="http://stackoverflow.com/questions/1011339/how-do-you-make-a-http-request-with-c">http://stackoverflow.com/questions/1011339/how-do-you-make-a-http-request-with-c</a><br>
+        <a href="https://www.example-code.com/cpp/http_post_json.asp">https://www.example-code.com/cpp/http_post_json.asp</a><br>
+        <a href="https://github.com/mrtazz/restclient-cpp">https://github.com/mrtazz/restclient-cpp</a><br>
+        w razie czego możemy na ten temat pogadać.</p>
+    <h3 id="sprawdzenie-statusu-ubezpieczenia-wszystkich-pacjentów">8. Sprawdzenie statusu ubezpieczenia wszystkich pacjentów</h3>
+    <p><strong>UWAGA</strong> wg zaleceń NFZ hurtowe sprawdzanie jest dopuszczalne tylko w godzinach nocnych,<br>
+        można się spodziewać że w razie wykonywania tej operacji w godzinach pracy wielu przychodzi, NFZ zacznie blokować nam dostęp do swoich serwerów.</p>
+    <p>Wywołanie tej funkcjonalności powoduje następujące efekty:</p>
+    <ul>
+        <li>jeżeli włączona jest opcja zapisu wyniku sprawdzenia do pliku to podobnie jak w przypadku pojedynczego sprawdzenia dla każdego numeru PESEL w
+            folderze z wynikami i dnia sprawdzenia pojawi się stosowny plik.
+        </li>
+        <li>po każdym sprawdzeniu zostanie zapisany plik z raportem informującym o tym:
+            <ul>
+                <li>ile numerów PESEL znaleziono,</li>
+                <li>ile zapytań o sprawdzenie statusu ubezpieczenia wysłano do eWUŚ-a,</li>
+                <li>ile oraz wyszczególnione numery PESEL dla których sprawdzenie się nie powiodło,</li>
+                <li>ile oraz wyszczególnione numery PESEL które eWUŚ określił jako nie ubezpieczone.</li>
+            </ul>
+        </li>
+    </ul>
+    <p>Sprawdzenie statusu ubezpieczenia wszystkich pacjentów można wywołać 2 sposobami.</p>
+    <ol>
+        <li>Automatycznie przez aplikację. Jeżeli aplikacja jest włączona, może ona samodzielnie wywoływać tą funkcjonalność zgodnie z harmonogramem ustawionym
+            w konfiguracji.
+        </li>
+        <li>Podobnie jak w przypadku sprawdzenia statusu pojedynczego numeru pesel przez żądanie HTTP. Wywołanie w przeglądarce następującego adresu URL:</li>
+    </ol>
+    <pre class=" language-text"><code class="prism  language-text"> http://localhost:13000/ewus/check/all
+</code></pre>
+    <p>spowoduje sprawdzenie wszystkich numerów PESEL.<br>
+        <strong>UWAGA</strong> podczas testów stwierdziłem że sprawdzenie 10.000 pacjentów zajmuje ok. 20 minut.<br>
+        Tyle też czasu trzeba byłoby czekać w przeglądarce na odpowiedź - istnieje też ryzyko że przeglądarka automatycznie przerwałaby oczekiwanie (timeout)
+        nie dostając zbyt długo odpowiedzi.</p>
+    <p><strong>UWAGA</strong> pracując ze starszą kopią bazy zauważyłem kilka wartości PESEL dla których sprawdzenie nie jest możliwe lub nie ma sensu dlatego
+        wprowadziłem kilka filtrów:</p>
+    <ul>
+        <li>choć to raczej błąd to jeżeli wystąpi kilku pacjentów o tym samym numerze PESEL to i tak PESEL będzie sprawdzany tylko 1 raz,</li>
+        <li>jeżeli w bazie w kolumnie PESEL będzie NULL lub pusty String zostanie taka wartość pominięta,</li>
+        <li>jeżeli w bazie w kolumnie PESEL długość będzie inna niż 11 znaków to taka wartość zostanie pominięta,</li>
+        <li>jeżeli numer PESEL jest dla małego dziecka czyli 00000000000 to taka wartość zostanie pominięta,</li>
+        <li>jeżeli numer PESEL kończy się na 00000 czyli gdy znana jest tylko data urodzenia to taka wartość zostanie pominięta.</li>
+    </ul>
+    <h3 id="jak-pracować-z-aplikacją">9. Jak pracować z aplikacją</h3>
+    <p>Na ten moment sugeruję zainstalowanie aplikacji oraz skonfigurowanie. Następnie uruchomienie któregoś wieczora i wykonanie test porównawczego - aplikacji
+        oraz mMedica.<br>
+        Możliwe że pojawią się jakieś problemy które należałoby najpierw naprawić.<br>
+        Na ten moment nie widzę więcej problemów, jednakże doświadczenie podpowiada mi że mogą być potrzebne pierwsze próby rozruchu z błędami zanim dojdziemy
+        do stabilnej wersji.</p>
+    <p>Dalsze użytkowanie widzę na 2 sposoby:</p>
+    <ol>
+        <li>Pozwolić aplikacji działać non-stop i uruchamiać się każdego dnia od poniedziałku do piątku zgodnie z domyślnym harmonogramem.<br>
+            Od czasu do czasu usunąć foldery z wynikami sprawdzenia z dni które nie będą interesujące, aby uniknąć zbędnego zużywania przestrzeni dyskowej.
+        </li>
+        <li>Uruchamiać aplikację tylko wtedy kiedy chcemy rzeczywiście wykonać sprawdzenie. Np. chcąc aby sprawdzenie zostało wykonane w piątek 00:30:00
+            uruchomić aplikację już w poprzedzający czwartek np. o 21:00.
+        </li>
+        <li>System Windows ma wbudowaną obsługę harmonogramów - można by je ręcznie skonfigurować aby uruchamiał plik ze skryptem <em>.bat</em> uruchamiającym
+            aplikację wtedy kiedy chcemy.
+        </li>
+    </ol>
+    <p>Następnego dnia wyciągnąć z raportu listę numerów PESEL zidentyfikowanych jako nie ubezpieczonych pacjentów. Tą listę przekopiować do Excela tak jak do
+        tej pory<br>
+        czy też inaczej, czy też wprowadzić do mMedica lub ProgramNZOZ.</p>
+    <h3 id="możliwości-rozszerzenia-programu">10. Możliwości rozszerzenia programu</h3>
+    <ol>
+        <li>Zapisywanie wynikowej listy osób rozpoznanych jako nie posiadających ubezpieczenia do pliku typu CSV lub Excel - jak będę wiedział w jakim formacie
+            miało by<br>
+            to być to można to zrobić. Możliwe jest również zapisywanie pozostałych danych.
+        </li>
+        <li>Automatyczne porównywanie z poprzednim wynikiem sprawdzenia, lub zbieranie tego do pliku Excela. Możliwe byłoby odczytywanie pliku Excela oraz
+            jego<br>
+            modyfikacja np. dodanie kolumny zawierającej status ubezpieczenia w kolejnym dniu. Jednakże do tego celu efektywniejsze byłoby użycie bazy danych
+            gdzie<br>
+            statusy byłby by składowane zaś sama aplikacja (lub odrębna) czytała by zeń dane i generowała plik Excel.
+        </li>
+        <li>Na ten moment gdy stwierdzasz że pacjent powinien złożyć deklarację bo eWUŚ go wyrzuci na koniec miesiąca (na podstawie zmiany statusu ubezpieczenia
+            1 dnia<br>
+            roboczego) wprowadzasz stosowny marker do bazy ProgramNZOZ. Mogłoby to się dziać automatycznie. Jedynie na ten moment nie jestem pewien czy będę w
+            stanie<br>
+            zapisywać do bazy <em>Bazap</em>. Mianowicie przy odczytywaniu listy numerów PESEL musiałem wyciągnąć wszystkie wpisy i dopiero w nich wyszukiwać
+            zamiast wysłać<br>
+            zapytanie do bazy i dostać jedynie interesujące (np. te które są poprawnymi numerami PESEL jak opisane w<br>
+            sekcji <a href="#sprawdzenie-statusu-ubezpieczenia-wszystkich-pacjent%C3%B3w">sprawdzania wszystkich numerów</a>).
+        </li>
+        <li>Mogę zrobić prostą stronę Internetową (w osobnej aplikacji) która łączyła by się z tą aplikacją przez REST API. Ta strona robiła by praktycznie to
+            samo co ta<br>
+            dostarczana przez eWUŚ z tą różnicą że nie trzeba byłoby się logować - jedynie byłby pojedynczy input na PESEL i następnie byłby wyświetlany wynik.
+            Jednakże<br>
+            byłoby to samo co np. Kasia teraz robi w rejestracji czyli kopiuje PESEL z ProgramNZOZ do mMedica i tam sprawdza. Jedyna różnica byłaby taka że
+            można by<br>
+            udostępnić tą stronę w sieci wewnętrznej w Żarnowie bez ograniczenia liczby równocześnie działających instancji tak jak jest w tej chwili. Po
+            odpowiednich<br>
+            modyfikacjach możliwe byłoby sprawdzenie kilka PESELI jednocześnie np. do max 10, choć nie wiem czy miałoby to jakikolwiek sens.
+        </li>
+    </ol>
+</div>
+</body>
+
+</html>
