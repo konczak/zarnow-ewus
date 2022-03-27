@@ -9,6 +9,9 @@ GET {{zarnow-ewus-address}}/ewus/check?pesel=12345678901
 ### check all pesels from db
 GET {{zarnow-ewus-address}}/ewus/check/all
 
+### check all pesels listed in file
+GET {{zarnow-ewus-address}}/ewus/check/listed
+
 # MAINTENANCE
 
 ### test loading patiens from db

@@ -10,7 +10,9 @@ import java.util.Set;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class CheckCWUForAllReport {
+public class CheckCWUForManyPeselsReport {
+
+    private final String name;
 
     private final long countOfCheckedPesel;
 
@@ -38,11 +40,15 @@ public class CheckCWUForAllReport {
         return this.peseleBezUbezpieczenia.size();
     }
 
-    public static CheckCWUForAllReportBuilder builder() {
-        return new CheckCWUForAllReportBuilder();
+    public static CheckCWUForManyPeselsBuilder builder() {
+        return new CheckCWUForManyPeselsBuilder();
     }
 
-    public static class CheckCWUForAllReportBuilder {
+    public static class CheckCWUForManyPeselsBuilder {
+        private final String REPORT_NAME_CHECK_ALL = "CheckCWUForAllReport";
+        private final String REPORT_NAME_CHECK_LISTED = "CheckCWUForListedPeselsReport";
+
+        private String name;
 
         private long countOfAllPesel;
 
@@ -56,7 +62,8 @@ public class CheckCWUForAllReport {
 
         private final Set<String> peseleBezUbezpieczenia;
 
-        public CheckCWUForAllReportBuilder() {
+        CheckCWUForManyPeselsBuilder() {
+            this.name = null;
             this.countOfAllPesel = 0;
             this.countOfCheckedPesel = 0;
             this.startProcess = 0;
@@ -65,31 +72,51 @@ public class CheckCWUForAllReport {
             this.peseleBezUbezpieczenia = new HashSet<>();
         }
 
-        public void withCountOfAllPesel(long countOfAllPesel) {
+        public CheckCWUForManyPeselsBuilder withNameForAll() {
+            this.name = REPORT_NAME_CHECK_ALL;
+            return this;
+        }
+
+        public CheckCWUForManyPeselsBuilder withNameForListed() {
+            this.name = REPORT_NAME_CHECK_LISTED;
+            return this;
+        }
+
+        public CheckCWUForManyPeselsBuilder withCountOfAllPesel(long countOfAllPesel) {
             this.countOfAllPesel = countOfAllPesel;
+            return this;
         }
 
-        public void incrementCountOfCheckedPesel() {
+        public CheckCWUForManyPeselsBuilder incrementCountOfCheckedPesel() {
             this.countOfCheckedPesel++;
+            return this;
         }
 
-        public void registerStart() {
+        public CheckCWUForManyPeselsBuilder registerStart() {
             this.startProcess = System.currentTimeMillis();
+            return this;
         }
 
-        public void registerEnd() {
+        public CheckCWUForManyPeselsBuilder registerEnd() {
             this.endProcess = System.currentTimeMillis();
+            return this;
         }
 
-        public void addFailedPesel(String pesel) {
+        public CheckCWUForManyPeselsBuilder addFailedPesel(String pesel) {
             this.failedPesels.add(pesel);
+            return this;
         }
 
-        public void addPeselBezUbezpieczenia(String pesel) {
+        public CheckCWUForManyPeselsBuilder addPeselBezUbezpieczenia(String pesel) {
             this.peseleBezUbezpieczenia.add(pesel);
+            return this;
         }
 
-        public CheckCWUForAllReport build() {
+        public CheckCWUForManyPeselsReport build() {
+            if (name == null
+                    || name.trim().isEmpty()) {
+                throw new IllegalStateException("report name has to be specified");
+            }
             if (startProcess == 0
                     || endProcess == 0) {
                 throw new IllegalStateException("start and end of process has to be registered");
@@ -99,11 +126,14 @@ public class CheckCWUForAllReport {
                 throw new IllegalStateException("total count of all pesel is not set");
             }
 
-            return new CheckCWUForAllReport(countOfCheckedPesel,
+            return new CheckCWUForManyPeselsReport(
+                    name,
+                    countOfCheckedPesel,
                     countOfAllPesel,
                     (endProcess - startProcess) / 1000,
                     new HashSet<>(failedPesels),
-                    new HashSet<>(peseleBezUbezpieczenia));
+                    new HashSet<>(peseleBezUbezpieczenia)
+            );
         }
 
     }
