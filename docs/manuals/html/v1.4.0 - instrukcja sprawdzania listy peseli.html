@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>manual</title>
+    <link rel="stylesheet" href="https://stackedit.io/style.css"/>
+</head>
+
+<body class="stackedit">
+<div class="stackedit__html"><h1 id="żarnów-ewuś-v1.4.0">Żarnów eWUŚ v1.4.0</h1>
+    <h3 id="wymaganie---możliwość-sprawdzenia-listy-peseli-na-żądanie">1. Wymaganie - możliwość sprawdzenia listy peseli na żądanie</h3>
+    <p>Potrzebne jest rozwiązanie które pozwoli sprawdzić hurtem listę wybranych peseli.<br>
+        Najlepiej w sposób podobny do nocnego sprawdzania wszystkich.<br>
+        Przykładem użycia może być sytuacja gdy w nocy sprawdzenie kilkudziesięciu peseli nie powiodło się.<br>
+        Wtedy w pliku raportu są wymienione błędne czyli mamy listę dla których wystąpił błąd.</p>
+    <h3 id="aktualizacj-konfiguracji">2. Aktualizacj konfiguracji</h3>
+    <p>Podczas instalacji wersji <strong>zarnow-ewus v1.4.0</strong> konieczne jest dodanie wpisu do pliku konfiguracyjnego <em>application.properties</em>.<br>
+        Nowy klucz wygląda następujące:</p>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> ewus.check-listed.file-path</span><span
+            class="token punctuation">=</span> <span class="token attr-value"> </span>
+</code></pre>
+    <p>musi on zawierać pełną ścieżkę wraz z nazwą pliku w którym zostanie umieszczona lista peseli do sprawdzenia.<br>
+        Plik najlepiej aby miał rozszerzenie <code>.csv</code> aby jasno wskazywał jakiego format danych przechowuje.<br>
+        Więcej informacji o pliku i formacie w sekcji <a href="#format-pliku-do-sprawdzania-listy-peseli">Format pliku do sprawdzania listy peseli</a>.</p>
+    <p>przykładowo u mnie wygląda on następująco:</p>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> ewus.check-listed.file-path</span><span
+            class="token punctuation">=</span><span class="token attr-value">e:/programowanie/nzoz/ewus-prod/pesele-do-sprawdzenia.csv  </span>
+</code></pre>
+    <p>Po zmianie w pliku <em>application.properties</em> należy wykonać standardowe kroki dla instalacji nowej wersji. To jest:</p>
+    <ol>
+        <li>Zatrzymać działającą usługę Windows (odczekać chwilę aż się zakończy),</li>
+        <li>Podmienić plik JAR “zarnow-ewus.jar” plikiem “zarnow-ewus-1.4.0.jar” (nazwa pliku powinna brzmieć “zarnow-ewus.jar” aby być zgodna z plikiem
+            run.bat),
+        </li>
+        <li>Uruchomić usługę ponownie.</li>
+    </ol>
+    <h3 id="format-pliku-do-sprawdzania-listy-peseli">3. Format pliku do sprawdzania listy peseli</h3>
+    <p>Potrzebujemy podać listę peseli. Do tego raport dla błędów generuje kolejne pesele jeden pod drugim.<br>
+        Najlepiej skorzystać z ogólnie znanego <a href="https://pl.wikipedia.org/wiki/CSV_%28format_pliku%29">formatu pliku jakim jest CSV</a>.</p>
+    <p>Jako że nasz plik będzie zawierał na ten moment tylko jedną kolumnę to pominiemy nazwy/nagłówki kolumn w pliku CSV.<br>
+        Dzięki temu wystarczy z pliku z raportem zaznaczyć listę peseli i przekopiować do pliku CSV bez dodatkowych kroków.</p>
+    <p>Przykładowy plik CSV nadający się do sprawdzenia:</p>
+    <pre class=" language-csv"><code class="prism  language-csv"> 12345678901
+ 12345678902
+ 12345678903
+ 12345678904
+ 12345678905
+ 12345678906
+ 12345678907  
+</code></pre>
+    <p><strong>UWAGA</strong> jest to poprawny przykład pliku, ale nr PESEL nie są poprawne więc wywołanie dlań sprawdzenia serwer eWUŚ odrzuci.</p>
+    <p>Plik CSV możemy dowolnie modyfikować dla kolejnych sprawdzeń bez zatrzymywania usługi.</p>
+    <h3 id="uruchamianie-mechanizmu-sprawdzenia-listy-wybranych-peseli">4. Uruchamianie mechanizmu sprawdzenia listy wybranych peseli</h3>
+    <p>Mając przygotowany i zapisany plik CSV z numerami pesel możemy wywołać operację sprawdzania.<br>
+        Do tego celu aplikacja wystawia metodę HTTP GET <em>“/ewus/check/listed”</em>.<br>
+        Otwierając w przeglądarce URL:</p>
+    <pre class=" language-txt"><code class="prism  language-txt"> http://localhost:13000/ewus/check/listed
+</code></pre>
+    <p>spowodujemy wywołanie sprawdzenia dla nr PESEL wymienionych w pliku CSV.<br>
+        Aplikacja odczyta wszystkie numery z pliku, a następnie dla każdego skontaktuje się z serwerem eWUŚ pytając o status ubezpieczenia.<br>
+        Dokładne wyniki opisuje sekcja <a href="#wyniki-sprawdzenia-listy-wybranych-peseli">Wyniki sprawdzenia listy wybranych peseli</a>.</p>
+    <p><strong>UWAGA</strong> po otwarciu w/w adresu URL w przeglądarce będzie ona czekać na wynik - a ten aplikacja zwróci dopiero gdy skończy sprawdzanie
+        wszystkich.<br>
+        Dla 50 peseli zwykle wystarczy kilkanaście sekund. Dla większej liczby oczywiście ten czas będzie większy.</p>
+    <h3 id="wyniki-sprawdzenia-listy-wybranych-peseli">5. Wyniki sprawdzenia listy wybranych peseli</h3>
+    <p>Po zakończeniu sprawdzania na poziomie przeglądarki zobaczymy jedynie białą pustą stronę. Interesujące wyniki są gdzie indziej.</p>
+    <p>Generalnie wyniki są mocno analogiczne do rozwiązania sprawdzającego wszystkie pesele z bazy.</p>
+    <ol>
+        <li>
+            <p>Każdy poprawnie sprawdzony PESEL dostanie swój własny plik XML.<br>
+                Plik XML zostanie zapisany w tym samym folderze jak dla sprawdzenia wszystkich. (czyli tam gdzie wskazuje konfiguracja <em>ewus.persistence.folder</em>
+                oraz w folderze nazwanego datą dnia wykonania sprawdzenia).<br>
+                Nazwa pliku również będzie analogiczna czyli <em>czas-sprawdzenia_PESEL_STATUS_UBEZPIECZENIA.xml</em>.</p>
+        </li>
+        <li>
+            <p>Raport z podsumowaniem wykonania sprawdzenia w formacie TXT analogicznym do sprawdzania wszystkich.<br>
+                Plik zostanie umieszczony w folderze wskazanym przez konfigurację <em>ewus.persistence.folder</em>.<br>
+                Opróćz czasu wykonania w nazwie pliku znajdzie się tekst <strong>CheckCWUForListedPeselsReport</strong>.<br>
+                Dzięki temu będzie można go łatwo odróżnić od raportu dla wszystkich który w nazwie ma <strong>CheckCWUForAllReport</strong>.<br>
+                Wewnątrz pliku również jako pierwsze linia pojawi się nazwa <strong>CheckCWUForListedPeselsReport</strong>.<br>
+                Pozostałe dane w pliku będą analogiczne jak w raporcie wszystkich czyli:</p>
+            <ul>
+                <li><em>proces trwał</em> - czas sprawdzenia od początku do końca,</li>
+                <li><em>liczba odnalezionych peseli</em> - ile peseli odczytano z pliku CSV,</li>
+                <li><em>liczba sprawdzonych peseli</em> - dla ilu peseli wykonano sprawdzenie,</li>
+                <li><em>liczba błędów podczas sprawdzania peseli</em> - dla ilu peseli trafiono na błąd,</li>
+                <li><em>liczba wykrytych peseli bez ubezpieczenia</em> - dla ilu peseli stwierdzono brak ubezpieczenia.</li>
+            </ul>
+            <p><strong>UWAGA</strong> wartości w <em>liczba odnalezionych peseli</em> oraz <em>liczba sprawdzonych peseli</em> będą się różnić jeżeli w pliku
+                CSV znajdą się wpisy takie jak pesel z samych “0”, czy zawierajacy tylko datę urodzenia, itp.</p>
+        </li>
+    </ol>
+    <h3 id="czy-można-wywołać-sprawdzenia-listy-wybranych-peseli-gdy-działa-sprawdzanie-wszystkich">6. Czy można wywołać sprawdzenia listy wybranych peseli gdy
+        działa sprawdzanie wszystkich?</h3>
+    <p>Generalnie jest to możliwe, ale nie zalecane.<br>
+        Operacje w trakcie sprawdzania nie przeszkadzały by sobie, ale liczba równoczensych zapytań do serwera eWUŚ zwiększyła by się dwukrotnie na sekundę.<br>
+        Mogłoby to doprowadzić do sytuacji że serwer zaczał by celowo odrzucać nasze sprawdzenia ze względu na zbyt dużą ilość zapytań.</p>
+    <p>Każde zapytanie do eWUŚ wymaga dołączenia tokenu uwierzytelniającego.<br>
+        Podczas sprawdzania wielu peseli (w obu przypadkach) najpierw jest logowanie, sprawdzanie kolejnych i wylogowanie.<br>
+        Operacja wylogowania w procesie zakończonym jako pierwszym spowodowała by że kolejne zapytania do eWUŚ z drugiego procesu kończyły by się błędem
+        uwierzytelnienia.</p>
+    <h3 id="ekstra---informacje-dodatkowe">7. Ekstra - informacje dodatkowe</h3>
+    <p>Od wersji <strong>eWUŚ-v5</strong> oraz <strong>zarnow-ewus-1.3.0</strong> do plików XML zapisywane są <em>“informacje_dodatkowe”</em>.<br>
+        Można w nich znaleźć kody wskazujące na kwarantannę, izolację, szczepienie, czy uprawnienie specjalne dla uchodźców z Ukrainy.<br>
+        Wraz z rozbudową w eWUŚ w tym polu mogą pojawiać się nowe kody które aplikacja bez problemu odczyta.</p>
+    <p>Wersja <strong>zarnow-ewus-1.4.0</strong> udostępnia te informacje w metodzie do sprawdzania pojedynczych PESEL.<br>
+        Wchodząc w przeglądarce na URL (z podanym prawidłowo numer PESEL):</p>
+    <pre class=" language-txt"><code class="prism  language-txt"> http://localhost:13000/ewus/check?pesel=WSTAW_SWOJ_NR_PESEL
+</code></pre>
+    <p>wyświetli się w przeglądarce wynik podobny do:</p>
+    <pre class=" language-json"><code class="prism  language-json"><span class="token punctuation">{</span>
+  <span class="token string">"status"</span><span class="token punctuation">:</span> <span class="token string">"PERSON_WITH_PESEL_EXISTS"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"pesel"</span><span class="token punctuation">:</span> <span class="token string">"02082642235"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"imie"</span><span class="token punctuation">:</span> <span class="token string">"ImięUKR"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"nazwisko"</span><span class="token punctuation">:</span> <span class="token string">"NazwiskoUKR"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"ubezpieczony"</span><span class="token punctuation">:</span> <span class="token boolean">true</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"oznaczenieRecept"</span><span class="token punctuation">:</span> <span class="token keyword">null</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"informacjeDodatkowe"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>  
+  <span class="token punctuation">{</span>  
+  <span class="token string">"kod"</span><span class="token punctuation">:</span> <span class="token string">"UKR"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"poziom"</span><span class="token punctuation">:</span> <span class="token string">"I"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"wartosc"</span><span class="token punctuation">:</span> <span class="token string">"Pacjent posiada uprawnienie do świadczeń opieki zdrowotnej na mocy Ustawy z dnia 12 marca 2022 r. o pomocy obywatelom Ukrainy w związku z konfliktem zbrojnym na terytorium tego państwa"</span>  
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>  
+  <span class="token punctuation">{</span>  
+  <span class="token string">"kod"</span><span class="token punctuation">:</span> <span class="token string">"IZOLACJA DOMOWA"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"poziom"</span><span class="token punctuation">:</span> <span class="token string">"O"</span><span
+                class="token punctuation">,</span>
+  <span class="token string">"wartosc"</span><span class="token punctuation">:</span> <span class="token string">"Pacjent podlega izolacji domowej do dnia 10-04-2022"</span>  
+  <span class="token punctuation">}</span>  
+ <span class="token punctuation">]</span><span class="token punctuation">}</span>
+  
+</code></pre>
+    <p>gdzie możemy zobaczyć że:</p>
+    <ul>
+        <li>pacjentowi należą się świadczenia w ramach pomocy dla Ukraińców</li>
+        <li>pacjent podlega izolacji do 10 kwietnia 2022.</li>
+    </ul>
+</div>
+</body>
+
+</html>
