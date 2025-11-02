@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.konczak.nzoz.ewus.client.ewus.namespace.AuthNamespaceUtil;
 import pl.konczak.nzoz.ewus.config.EwusCredentialsConfiguration;
+import pl.konczak.nzoz.ewus.util.SecurityTOTPUtil;
 
 import javax.xml.soap.*;
 
@@ -32,11 +33,21 @@ public class LoginRequestFactory {
         itemParam(credentials, "type", ewusCredentialsConfiguration.getUserType());
         itemParam(credentials, "idntSwd", ewusCredentialsConfiguration.getIdentyfikatorSwiadczeniodawcy());
         itemParam(credentials, "login", ewusCredentialsConfiguration.getLogin());
+        itemParam(credentials, "mfaTotp", generateTotp());
 
         SOAPElement password = login.addChildElement(AuthNamespaceUtil._Password_QNAME);
         password.addTextNode(ewusCredentialsConfiguration.getPassword());
 
         return message;
+    }
+
+    private String generateTotp() {
+        return SecurityTOTPUtil.generateTOTP(
+                ewusCredentialsConfiguration.getTotp().getSecret(),
+                ewusCredentialsConfiguration.getTotp().getAlgorithm(),
+                ewusCredentialsConfiguration.getTotp().getDigits(),
+                ewusCredentialsConfiguration.getTotp().getPeriod()
+        );
     }
 
     private SOAPElement itemParam(SOAPElement credentials, String name, String value) throws Exception {

@@ -21,4 +21,6 @@ public class EwusCredentialsConfiguration {
 
     private String password;
 
+    private TotpConfig totp;
+
 }
