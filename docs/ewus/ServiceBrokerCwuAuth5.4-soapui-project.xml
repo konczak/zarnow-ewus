@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project name="ServiceBrokerCwuAuth5.4" soapui-version="5.6.0" resourceRoot="${projectDir}" abortOnError="false" runType="SEQUENTIAL" activeEnvironment="Default" id="d5965719-eac6-451a-94a6-c74aefb710f5" xmlns:con="http://eviware.com/soapui/config">
+<con:soapui-project name="ServiceBrokerCwuAuth5.4" soapui-version="5.5.0" resourceRoot="${projectDir}" abortOnError="false" runType="SEQUENTIAL"
+                    activeEnvironment="Default" id="d5965719-eac6-451a-94a6-c74aefb710f5" xmlns:con="http://eviware.com/soapui/config">
 	<con:settings/>
 	<con:interface name="ServiceBrokerSoapBinding" bindingName="{http://xml.kamsoft.pl/ws/broker}ServiceBrokerSoapBinding" soapVersion="1_1" definition="https://ewus.nfz.gov.pl/ws-broker-server-ewus-auth-test/services/ServiceBroker?wsdl" xsi:type="con:WsdlInterface" wsaVersion="NONE" anonymous="optional" id="c0f14cf6-ae76-4a2a-8679-23ef2d67d66f" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 		<con:settings/>
