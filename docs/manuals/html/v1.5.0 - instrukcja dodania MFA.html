@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome file</title>
+    <link rel="stylesheet" href="https://stackedit.io/style.css"/>
+</head>
+
+<body class="stackedit">
+<div class="stackedit__html"><h1 id="żarnów-ewuś-v1.5.0">Żarnów eWUŚ v1.5.0</h1>
+    <h3 id="wymaganie---możliwość-logowania-do-ewuś-z-obsługą-mfa">1. Wymaganie - możliwość logowania do eWUŚ z obsługą MFA</h3>
+    <p>System eWUŚ od 17 listopada 2025 będzie wymagał rozszerzonej autentykacji o MFA.<br>
+        Na poziomie aplikacji konieczne były zmiany które potrafią wygenerować TOTP i dodać do żądania zalogowania.<br>
+        Aby rozwiązanie działało w wersji produkcyjnej konieczne są podmiana pliku JAR oraz dodanie kilku properties do konfiguracji.</p>
+    <h3 id="aktualizacj-konfiguracji">2. Aktualizacj konfiguracji</h3>
+    <p>Podczas instalacji wersji <strong>zarnow-ewus v1.5.0</strong> konieczne jest dodanie wpisów do pliku konfiguracyjnego <em>application.properties</em>.
+        Nowe klucze to następująco:</p>
+    <pre class=" language-properties"><code class="prism  language-properties"><span class="token attr-name"> ewus.credentials.totp.secret</span><span
+            class="token punctuation">=</span>
+<span class="token attr-name"> ewus.credentials.totp.issuer</span><span class="token punctuation">=</span>
+<span class="token comment"> # SHA1 in Java is called HmacSHA1</span>
+<span class="token attr-name"> ewus.credentials.totp.algorithm</span><span class="token punctuation">=</span><span class="token attr-value">HmacSHA1</span>
+<span class="token attr-name"> ewus.credentials.totp.digits</span><span class="token punctuation">=</span><span class="token attr-value">6</span>
+<span class="token attr-name"> ewus.credentials.totp.period</span><span class="token punctuation">=</span><span class="token attr-value">30  </span>
+</code></pre>
+    <p>klucze <code>ewus.credentials.totp.secret</code> oraz <code>ewus.credentials.totp.issuer</code> należy uzupełnić odpowiednimi wartościami, podczas gdy
+        pozostałe zachować tak jak w przykładzie.</p>
+    <p>💡 Dla porządku sugeruję dodać je po linijce z kluczem <code>ewus.credentials.password</code>.</p>
+    <p>Wartości można odczytać z kodu QR i musi to być ten sam kod QR który został w panelu administratora skonfigurowany dla użytkownika podanego <code>ewus.credentials.login</code>.<br>
+        W przeciwnym wypadku logowanie do eWUŚ będzie zwracało błąd o niepoprawnych danych logowania.</p>
+    <p>❗ UWAGA: zgodnie z komunikatem ostrzegawczym eWUŚ, istotne jest aby czas na serwerze na którym działa aplikacja był zgodny z czasem serwera.<br>
+        Przestawienie czasu zimowy/letni czy rozsynchronizowanie się może prowadzić do błędów logowania.<br>
+        Dlaczego? Ponieważ czas jest składową generowanego TOTP, oraz ma on krótką trwałość od wygenerowania po czym jest nieważny.</p>
+</div>
+</body>
+
+</html>
