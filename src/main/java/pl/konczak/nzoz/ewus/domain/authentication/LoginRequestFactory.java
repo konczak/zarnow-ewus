@@ -2,6 +2,7 @@ package pl.konczak.nzoz.ewus.domain.authentication;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import pl.konczak.nzoz.ewus.client.ewus.namespace.AuthNamespaceUtil;
 import pl.konczak.nzoz.ewus.config.EwusCredentialsConfiguration;
@@ -9,6 +10,7 @@ import pl.konczak.nzoz.ewus.util.SecurityTOTPUtil;
 
 import javax.xml.soap.*;
 
+@Slf4j
 @Component
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class LoginRequestFactory {
@@ -42,6 +44,10 @@ public class LoginRequestFactory {
     }
 
     private String generateTotp() {
+        if (log.isDebugEnabled()) {
+            log.debug("Generating Totp Token using {}", ewusCredentialsConfiguration.getTotp());
+        }
+
         return SecurityTOTPUtil.generateTOTP(
                 ewusCredentialsConfiguration.getTotp().getSecret(),
                 ewusCredentialsConfiguration.getTotp().getAlgorithm(),

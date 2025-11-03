@@ -36,6 +36,7 @@ public class AuthClient {
         if (log.isDebugEnabled()) {
             log.debug("request to Auth WS completed");
             log.debug(SOAPFormatterUtil.format(request));
+            log.debug(SOAPFormatterUtil.format(response));
         }
         return response;
     }
